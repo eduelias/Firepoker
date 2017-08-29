@@ -299,10 +299,10 @@ angular.module('firePokerApp')
         ];
 
         // Set Defaults
-        $scope.newGame = { deck: 0 };
-        $scope.showCardDeck = false;
-        $scope.showSelectEstimate = false;
-        $scope.disablePlayAgainAndRevealButtons = false;
+        $scope.newGame = { deck: 1 };
+        $scope.showCardDeck = true;
+        $scope.showSelectEstimate = true;
+        $scope.disablePlayAgainAndRevealButtons = true;
         $scope.showCards = true;
 
         // Set card deck visibility

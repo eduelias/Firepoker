@@ -48,6 +48,7 @@
                     </div>
                     <button type="submit" class="btn btn-success" ng-click="acceptRound()">Accept round</button>
                     <button type="submit" class="btn btn-primary" ng-click="playAgain()" ng-disabled="disablePlayAgainAndRevealButtons">Play again</button>
+                    <!-- <button type="submit" class="btn btn-primary" ng-click="orderCards()" ng-disabled="disablePlayAgainAndRevealButtons">Reorder</button> -->
                     <button type="submit" class="btn btn-primary" ng-click="revealCards()" ng-disabled="disablePlayAgainAndRevealButtons">Reveal cards</button>
                     <button type="submit" class="btn btn-primary" ng-click="cancelRound()">Cancel round</button>
                 </form>
@@ -63,8 +64,7 @@
         <!-- Create story -->
         <div>
             <ul class="nav nav-tabs">
-                <li ng-hide="isOwner" class="active"><a href="#story-list-view" data-toggle="tab">Story list</a></li>
-                <li ng-show="isOwner" class="active"><a href="#story-list" data-toggle="tab">Story list</a></li>
+                <li class="active"><a href="#story-list" data-toggle="tab">Story list</a></li>
                 <li><a href="#estimated" data-toggle="tab">Voted</a></li>
                 <li ng-show="isOwner"><a href="#free-form" data-toggle="tab">Free-form</a></li>
                 <li ng-show="isOwner"><a href="#structured" data-toggle="tab">Structured</a></li>
@@ -94,7 +94,7 @@
                         <button type="submit" class="btn btn-success" ng-disabled="formFreeForm.$invalid">Add story</button> or <a href="#">Cancel</a>
                     </form>
                 </div>
-                <div ng-show="isOwner" class="tab-pane active" id="structured">
+                <div ng-show="isOwner" class="tab-pane" id="structured">
                     <form name="formStructured" ng-submit="createStory('structured')" novalidate>
                         <div class="form-group">
                             <label for="structured-story-as-a-an">As a/an...</label>
@@ -115,25 +115,15 @@
                         <button type="submit" class="btn btn-success" ng-disabled="formStructured.$invalid">Add story</button> or <a href="#">Cancel</a>
                     </form>
                 </div>
-                <div ng-show="isOwner" class="tab-pane" id="story-list">
+                <div class="tab-pane active" id="story-list">
                     <div ng-show="game.stories">
                         <ul ng-show="unestimatedStoriesCount" class="list-unstyled">
                             <li ng-repeat="story in game.stories" ng-show="story.status == 'queue'">
-                                <div class="pull-right">
-                                    <a href="" ng-click="deleteStory($index)"><span class="glyphicon glyphicon-trash"></span></a>
+                                <div ng-show="isOwner" class="pull-right">
+                                    <a href="" ng-click="setStory($index)"><span class="glyphicon glyphicon-search" alt="Vote this"></span></a>
+                                    <a href="" ng-click="deleteStory($index)"><span class="glyphicon glyphicon-trash" alt="Remove this"></span></a>
                                 </div>
-                                <a href="" ng-click="setStory($index)">{{story.title}}</a>
-                                <p>{{story.notes}}</p>
-                                <hr ng-show="unestimatedStoriesCount > 1 && !$last">
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div ng-hide="isOwner" class="tab-pane" id="story-list-view">
-                    <div ng-show="game.stories">
-                        <ul ng-show="unestimatedStoriesCount" class="list-unstyled">
-                            <li ng-repeat="story in game.stories" ng-show="story.status == 'queue'">
-                                <span>{{story.title}}</span>
+                                <p>{{story.title}}</p>
                                 <p>{{story.notes}}</p>
                                 <hr ng-show="unestimatedStoriesCount > 1 && !$last">
                             </li>
