@@ -1,16 +1,16 @@
 <div class="row" ng-show="game">
     <div class="col-md-8">
-
+        <!-- Story -->
+        <div class="bordered" ng-show="game.estimate">
+            <p class="text-right">
+                <span class="label label-success">CURRENT</span>
+            </p>
+            <h5><span ng-model="game.estimate.title" contenteditable="isOwner" no-line-breaks="true">{{game.estimate.title}}</span></h5>
+            <p><span ng-model="game.estimate.notes" contenteditable="isOwner" contenteditable="true">{{game.estimate.notes}}</span></p>
+        </div>
         <!-- Estimate story -->
         <div ng-show="game.estimate">
-            <!-- Story -->
-            <div class="bordered">
-                <p class="text-right">
-                    <span class="label label-success">CURRENT</span>
-                </p>
-                <h5><span ng-model="game.estimate.title" contenteditable="true" no-line-breaks="true">{{game.estimate.title}}</span></h5>
-                <p><span ng-model="game.estimate.notes" contenteditable="true">{{game.estimate.notes}}</span></p>
-            </div>
+
             <!-- Estimates -->
             <div class="well">
                 <div ng-hide="game.estimate.results">
@@ -18,9 +18,9 @@
                 </div>
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
-                        <li ng-repeat="result in game.estimate.results" class="list-item">
-                            <div ng-show="showCards || result.user.id == fp.user.id" class="card text-center" href="#">{{result.points}}</div>
-                            <div ng-hide="showCards || result.user.id == fp.user.id" class="card card-facedown">&nbsp;</div>
+                        <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
+                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center" href="#">{{result.points}}</div>
+                            <div ng-hide="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
                             <p class="text-center truncate">{{result.user.fullname}}</p>
                         </li>
                     </ul>
@@ -33,9 +33,9 @@
                 </div>
             </div>
             <!-- Card deck -->
-            <div ng-show="showCardDeck" class="well well-sm">
+            <div ng-show="showCardDeck && game.participants[fp.user.id].active" class="well well-sm">
                 <ul class="list-inline">
-                    <li ng-repeat="card in decks[game.deck].cards"><a class="btn btn-default" href="" ng-click="estimate(card)">{{card}}</a></li>
+                    <li ng-repeat="card in decks[game.deck.id].cards"><a class="btn btn-default" href="" ng-click="estimate(card)">{{card}}</a></li>
                 </ul>
             </div>
             <!-- Select an estimate -->
@@ -160,10 +160,30 @@
                 <h5>Participants ({{totalOfOnlineParticipants()}})</h5>
                 <ul class="list-unstyled">
                     <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
-                        <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span>
-                        <span> {{participant.fullname}} </span>
-                        <span ng-show="participant.id == game.owner.id">(moderator)</span>
-
+                        <div ng-show="participant.active">
+                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]" isOwner=$scope.isOwner></users-control>
+                            <!-- <span title="Set as observator" class="glyphicon glyphicon-eye-open" ng-click="game.participants[participant.id].active = !game.participants[participant.id].active" ng-class="{disabled: game.participants[participant.id].active}"></span>
+                            <input type="checkbox" ng-disabled="participant.id != game.participants[fp.user.id].id && !isOwner" ng-model="participant.active" />
+                            <span title="Set as moderator" class="glyphicon" ng-show="isOwner" ng-click="game.participants[participant.id].moderator = !game.participants[participant.id].moderator" ng-class="{disabled: !game.participants[participant.id].moderator}"> ✪ </span>
+                            <span> {{participant.fullname}}</span>
+                            <span ng-show="participant.id == game.owner.id"> ♛ </span>
+                            <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="vspace">
+                <h5>Observers ({{totalOfObservers()}})</h5>
+                <ul class="list-unstyled">
+                    <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
+                        <div ng-hide="participant.active">
+                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]" isOwner=$scope.isOwner></users-control>
+                            <!-- <span title="Set as observator" class="glyphicon glyphicon-eye-open" ng-click="game.participants[participant.id].active = !game.participants[participant.id].active" ng-class="{disabled: game.participants[participant.id].active}"></span>
+                            <span title="Set as moderator" class="glyphicon" ng-show="isOwner" ng-click="game.participants[participant.id].moderator = !game.participants[participant.id].moderator" ng-class="{disabled: !game.participants[participant.id].moderator}"> ✪ </span>
+                            <span> {{participant.fullname}}</span>
+                            <span ng-show="participant.id == game.owner.id"> ♛ </span>
+                            <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span> -->
+                        </div>
                     </li>
                 </ul>
             </div>
