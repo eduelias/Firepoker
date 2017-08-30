@@ -64,17 +64,52 @@ angular.module('firePokerApp')
             }
         };
 
-        // Redirect to set fullname if empty
-        $scope.redirectToSetFullnameIfEmpty = function() {
-            if (
-                $routeParams.gid &&
-                $location.path() === '/games/' + $routeParams.gid &&
-                !$scope.fp.user.fullname
-            ) {
-                $location.path('/games/join/' + $routeParams.gid);
-                $location.replace();
+        $scope.decks = [{
+                id: 0,
+                cards: [0, 1, 2, 4, 8, 16, 32, 64, 128, '?', '☕'],
+                description: '0, 1, 2, 4, 8, 16, 32, 64, 128, ? and ☕'
+            },
+            {
+                id: 1,
+                cards: [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?', '☕'],
+                description: '0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 and ?,☕',
+                average: 'fibonacciAvg'
+            },
+            {
+                id: 2,
+                cards: [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', '☕'],
+                description: '0, ½, 1, 2, 3, 5, 8, 13, 20, 40, 100, and ?,☕'
             }
-        };
+        ]
+
+        $scope.fibonacciAvg = function(num) {
+                if (num <= 1) return 1;
+
+                var Fibonachi = [1, 1];
+
+                while (true) {
+                    var index = Fibonachi.length;
+                    Fibonachi.push(Fibonachi[index - 1] + Fibonachi[index - 2]);
+                    if (Fibonachi[Fibonachi.length - 1] > num) break;
+                }
+
+                if ((num - Fibonachi[Fibonachi.length - 2]) > (Fibonachi[Fibonachi.length - 1] - num))
+                    return next;
+
+                return previous;
+            },
+
+            // Redirect to set fullname if empty
+            $scope.redirectToSetFullnameIfEmpty = function() {
+                if (
+                    $routeParams.gid &&
+                    $location.path() === '/games/' + $routeParams.gid &&
+                    !$scope.fp.user.fullname
+                ) {
+                    $location.path('/games/join/' + $routeParams.gid);
+                    $location.replace();
+                }
+            };
 
         // Redirect to game if fullname already set
         $scope.redirectToGameIfFullnameAlreadySet = function() {
@@ -225,6 +260,7 @@ angular.module('firePokerApp')
         $scope.getResultsAverage = function() {
             var avg = 0;
             if ($scope.game.estimate.results) {
+                // here, if the deck has an specific calculation, use it                
                 var sum = 0;
                 angular.forEach($scope.game.estimate.results, function(result) {
                     if (result.points && angular.isNumber(result.points)) {
@@ -232,6 +268,9 @@ angular.module('firePokerApp')
                     }
                 });
                 avg = Math.ceil(sum / $scope.game.estimate.results.length);
+                if ($scope.decks[game.deck].average) {
+                    avg = $scope[$scope.decks[game.deck].average](avg);
+                }
             }
             return avg;
         };
@@ -291,15 +330,8 @@ angular.module('firePokerApp')
             $scope.game.estimate.status = 'reveal';
         };
 
-        // Card deck options
-        $scope.decks = [
-            [0, 1, 2, 4, 8, 16, 32, 64, 128, '?', '☕'],
-            [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?', '☕'],
-            [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', '☕']
-        ];
-
         // Set Defaults
-        $scope.newGame = { deck: 1 };
+        $scope.newGame = { deck: $scope.decks[1] };
         $scope.showCardDeck = true;
         $scope.showSelectEstimate = true;
         $scope.disablePlayAgainAndRevealButtons = true;
