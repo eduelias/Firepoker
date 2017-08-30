@@ -37,8 +37,8 @@ angular.module('firePokerApp')
                 ' <span ng-hide="game.owner.id == loggeduser.id || participant.id == loggeduser.id" class="glyphicon glyphicon-eye-open" style="opacity:0.3"></span>' +
                 ' <span title="Set as moderator" class="glyphicon clickable" ng-show="game.owner.id == loggeduser.id" ng-click="participant.moderator = !participant.moderator" ng-class="{disabled: !participant.moderator}"> ✪ </span>' +
                 ' <span> {{participant.fullname}}</span>' +
-                ' <span ng-show="participant.moderator" style="font-size: 1.5em"> ♘ </span>' +
-                ' <span ng-show="participant.id == game.owner.id" style="font-size: 1.5em"> ♔ </span>' +
+                ' <span ng-show="participant.moderator" style="font-size: 1.5em" title="I´m a moderator"> ♘ </span>' +
+                ' <span ng-show="participant.id == game.owner.id" style="font-size: 1.5em" title="I´m the owner"> ♔ </span>' +
                 ' <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span>' +
                 '</div>',
             link: function(scope, element, attrs) {
