@@ -175,6 +175,10 @@ angular.module('firePokerApp')
             ref.child('/games/' + $routeParams.gid).set(game);
         };
 
+        $scope.toggleObservator = function() {
+            $scope.game.participants[$scope.fp.user.id].active = !$scope.game.participants[$scope.fp.user.id].active;
+        }
+
         // Create story
         $scope.createStory = function(type) {
             if (type === 'structured') {

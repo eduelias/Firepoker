@@ -48,7 +48,6 @@
                     </div>
                     <button type="submit" class="btn btn-success" ng-click="acceptRound()">Accept round</button>
                     <button type="submit" class="btn btn-primary" ng-click="playAgain()" ng-disabled="disablePlayAgainAndRevealButtons">Play again</button>
-                    <!-- <button type="submit" class="btn btn-primary" ng-click="orderCards()" ng-disabled="disablePlayAgainAndRevealButtons">Reorder</button> -->
                     <button type="submit" class="btn btn-primary" ng-click="revealCards()" ng-disabled="disablePlayAgainAndRevealButtons">Reveal cards</button>
                     <button type="submit" class="btn btn-primary" ng-click="cancelRound()">Cancel round</button>
                 </form>
@@ -128,30 +127,31 @@
                                 <hr ng-show="unestimatedStoriesCount > 1 && !$last">
                             </li>
                         </ul>
+                        <span ng-hide="unestimatedStoriesCount">No new stories to vote.</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="vspace">
-            <!-- <p>Project built with <a href="http://www.firebase.com" target="_blank">Firebase</a> and <a href="http://www.angularjs.org/" target="_blank">AngularJS</a> at <a href="http://www.wizehive.com/" target="_blank">WizeHive</a>.</p> -->
+            <p>Project built with <a href="http://www.firebase.com" target="_blank">Firebase</a> and <a href="http://www.angularjs.org/" target="_blank">AngularJS</a> at <a href="http://www.wizehive.com/" target="_blank">WizeHive</a> and <a href="mailto:du7@msn.com">du7@msn.com</a>.</p>
         </div>
     </div>
     <div class="col-md-4">
         <div class="affix">
-            <!--
-      <div class="btn-group pull-right">
-        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
           <span class="glyphicon glyphicon-cog"></span>
                                 </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#" ng-click="logout()">Logout</a></li>
-                                </ul>
-                    </div>
-                    -->
+                <ul class="dropdown-menu" role="menu">
+                    <li><a class='clickable' ng-click="toggleObservator()">Toggle observer mode</a></li>
+                    <!-- <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li> -->
+                    <li class="divider"></li>
+                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                </ul>
+            </div>
+
             <div>
                 <h2>{{game.name}}</h2>
                 <h4>{{fp.user.fullname}}</h4>
