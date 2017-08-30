@@ -311,6 +311,9 @@ span:focus:hover {
 
 .glyphicon {
     margin: 4px;
+}
+
+.clickable {
     cursor: pointer;
 }
 
@@ -318,6 +321,7 @@ span:focus:hover {
     font-size: 1.5em;
 }
 
-.glyphicon-eye-open {
+.glyphicon-eye-open,
+.glyphicon-eye-close {
     top: 4px;
 }

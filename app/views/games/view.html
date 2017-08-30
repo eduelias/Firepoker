@@ -153,7 +153,8 @@
                     </div>
                     -->
             <div>
-                <h4>{{game.name}}</h4>
+                <h2>{{game.name}}</h2>
+                <h4>{{fp.user.fullname}}</h4>
                 <p>{{game.description}}</p>
             </div>
             <div class="vspace">
@@ -161,13 +162,7 @@
                 <ul class="list-unstyled">
                     <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
                         <div ng-show="participant.active">
-                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]" isOwner=$scope.isOwner></users-control>
-                            <!-- <span title="Set as observator" class="glyphicon glyphicon-eye-open" ng-click="game.participants[participant.id].active = !game.participants[participant.id].active" ng-class="{disabled: game.participants[participant.id].active}"></span>
-                            <input type="checkbox" ng-disabled="participant.id != game.participants[fp.user.id].id && !isOwner" ng-model="participant.active" />
-                            <span title="Set as moderator" class="glyphicon" ng-show="isOwner" ng-click="game.participants[participant.id].moderator = !game.participants[participant.id].moderator" ng-class="{disabled: !game.participants[participant.id].moderator}"> ✪ </span>
-                            <span> {{participant.fullname}}</span>
-                            <span ng-show="participant.id == game.owner.id"> ♛ </span>
-                            <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span> -->
+                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
                         </div>
                     </li>
                 </ul>
@@ -177,12 +172,7 @@
                 <ul class="list-unstyled">
                     <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
                         <div ng-hide="participant.active">
-                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]" isOwner=$scope.isOwner></users-control>
-                            <!-- <span title="Set as observator" class="glyphicon glyphicon-eye-open" ng-click="game.participants[participant.id].active = !game.participants[participant.id].active" ng-class="{disabled: game.participants[participant.id].active}"></span>
-                            <span title="Set as moderator" class="glyphicon" ng-show="isOwner" ng-click="game.participants[participant.id].moderator = !game.participants[participant.id].moderator" ng-class="{disabled: !game.participants[participant.id].moderator}"> ✪ </span>
-                            <span> {{participant.fullname}}</span>
-                            <span ng-show="participant.id == game.owner.id"> ♛ </span>
-                            <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span> -->
+                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
                         </div>
                     </li>
                 </ul>

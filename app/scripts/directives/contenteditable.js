@@ -31,11 +31,14 @@ angular.module('firePokerApp')
             transclude: false,
             scope: { participant: '=participant', game: '=game', loggeduser: '=loggeduser' },
             template: '<div>' +
-                ' <span ng-show="game.owner.id == loggeduser.id || participant.id == loggeduser.id" title="Set as observator" class="glyphicon glyphicon-eye-open" ng-click="participant.active = !participant.active" ng-class="{disabled: participant.active}"></span>' +
-                ' <span ng-hide="game.owner.id == loggeduser.id || participant.id == loggeduser.id" title="Set as observator" class="glyphicon glyphicon-eye-open" ng-class="{disabled: true}"></span>' +
-                ' <span title="Set as moderator" class="glyphicon" ng-show="game.owner.id == loggeduser.id" ng-click="participant.moderator = !participant.moderator" ng-class="{disabled: !participant.moderator}"> ✪ </span>' +
+                ' <span ng-show=" participant.active && (game.owner.id == loggeduser.id || participant.id == loggeduser.id)" class="glyphicon glyphicon-eye-open  clickable" ng-click="participant.active = !participant.active" title="Set as observator"></span>' +
+                ' <span ng-show="!participant.active && (game.owner.id == loggeduser.id || participant.id == loggeduser.id)" class="glyphicon glyphicon-eye-close clickable" ng-click="participant.active = !participant.active" title="Set as active player"></span>' +
+
+                ' <span ng-hide="game.owner.id == loggeduser.id || participant.id == loggeduser.id" class="glyphicon glyphicon-eye-open" style="opacity:0.3"></span>' +
+                ' <span title="Set as moderator" class="glyphicon clickable" ng-show="game.owner.id == loggeduser.id" ng-click="participant.moderator = !participant.moderator" ng-class="{disabled: !participant.moderator}"> ✪ </span>' +
                 ' <span> {{participant.fullname}}</span>' +
-                ' <span ng-show="participant.id == game.owner.id"> ♛ </span>' +
+                ' <span ng-show="participant.moderator" style="font-size: 1.5em"> ♘ </span>' +
+                ' <span ng-show="participant.id == game.owner.id" style="font-size: 1.5em"> ♔ </span>' +
                 ' <span ng-show="participant.hasVoted == true" class="glyphicon glyphicon-ok text-success"></span>' +
                 '</div>',
             link: function(scope, element, attrs) {

@@ -129,6 +129,7 @@ angular.module('firePokerApp')
                 ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
                 var onlineRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
                 var activeRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/active');
+                var moderRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/moderator');
                 var connectedRef = ref.child('/.info/connected');
                 connectedRef.on('value', function(snap) {
                     if (snap.val() === true) {
@@ -137,6 +138,7 @@ angular.module('firePokerApp')
                         onlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
                         onlineRef.set(true);
                         activeRef.set(true);
+                        moderRef.set(false);
                     }
                 });
             }
@@ -400,10 +402,23 @@ angular.module('firePokerApp')
                 $scope.game.estimate &&
                 $scope.game.estimate.results &&
                 $scope.game.estimate.results.length &&
-                $scope.game.estimate.results.length >= $scope.totalOfOnlineParticipants()
+                $scope.game.estimate.results.length >= $scope.totalOfOnlineParticipants() &&
+                $scope.allVotersVoted()
             ) {
                 $scope.showCards = true;
             }
+        };
+
+        // seek non-voted voters
+        $scope.allVotersVoted = function() {
+            var voted = true;
+            angular.forEach($scope.game.participants, function(participant) {
+                if (participant.online === true && participant.active === true && participant.hasVoted !== true) {
+                    voted = false;
+                }
+            });
+
+            return voted;
         };
 
         // Set unestimated stories count
