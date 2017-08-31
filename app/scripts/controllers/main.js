@@ -79,10 +79,10 @@ angular.module('firePokerApp')
                 cards: [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', '☕'],
                 description: '0, ½, 1, 2, 3, 5, 8, 13, 20, 40, 100, and ?,☕'
             }
-        ]
+        ];
 
         $scope.fibonacciAvg = function(num) {
-            var f = (n, x = 0, y = 1) => y < n ? f(n, y, x + y) : y - n > n - x ? x : y
+            var f = (n, x = 0, y = 1) => y < n ? f(n, y, x + y) : y - n > n - x ? x : y;
             return f(num);
         };
 
@@ -110,13 +110,14 @@ angular.module('firePokerApp')
         };
 
         $scope.toggleModerator = function(participant) {
-            $scope.game.participants[participant.id].moderator = !$scope.game.participants[participant.id].moderator
+            $scope.game.participants[participant.id].moderator = !$scope.game.participants[participant.id].moderator;
         };
 
         // Load game and register presence
         $scope.loadGame = function() {
-            if ($scope.game && $scope.game.participants)
+            if ($scope.game && $scope.game.participants) {
                 $scope.fp.user = $scope.game.participants[$scope.fp.user.id];
+            }
             if ($routeParams.gid && $location.path() === '/games/' + $routeParams.gid) {
                 angularFire(ref.child('/games/' + $routeParams.gid), $scope, 'game').then(function() {
                     // Is current user the game owner?
@@ -128,7 +129,6 @@ angular.module('firePokerApp')
                 });
                 ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
                 var onlineRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
-                var activeRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/active');
                 var connectedRef = ref.child('/.info/connected');
                 connectedRef.on('value', function(snap) {
                     if (snap.val() === true) {
@@ -174,7 +174,7 @@ angular.module('firePokerApp')
 
         $scope.toggleObservator = function() {
             $scope.game.participants[$scope.fp.user.id].active = !$scope.game.participants[$scope.fp.user.id].active;
-        }
+        };
 
         // Create story
         $scope.createStory = function(type) {
@@ -385,7 +385,10 @@ angular.module('firePokerApp')
 
         // Disable play again and reveal buttons if results are empty
         $scope.setDisablePlayAgainAndRevealButtons = function() {
-            if (!$scope.game.estimate) return;
+            if (!$scope.game.estimate) {
+                return;
+            }
+
             if (!$scope.game.estimate.results || $scope.game.estimate.results.length === 0) {
                 $scope.disablePlayAgainAndRevealButtons = true;
             } else {
