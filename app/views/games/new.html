@@ -8,6 +8,10 @@
                 <input ng-model="fp.user.fullname" type="text" class="form-control" id="fullname" placeholder="Enter your name" required>
             </div>
             <div class="form-group">
+                <label for="email">Your email (in case you need re-enter a game)</label>
+                <input ng-model="fp.user.email" type="text" class="form-control" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
                 <label for="name">Game name</label>
                 <input ng-model="newGame.name" type="text" class="form-control" id="name" placeholder="Enter game name" required>
                 <p class="help-block">For example: 'FirePoker project'</p>
@@ -24,10 +28,6 @@
             <div class="form-group">
                 <label for="deck">Choose the set of estimate cards you want to use.</label>
                 <select class="form-control" id="deck" ng-model="newGame.deck" required ng-options="deck.description for deck in decks">
-                        <!-- <option ng-repeat="deck in decks" value={{deck.id}}>{{deck.description}}</a></li> -->
-          <!-- <option value="0">0, 1, 2, 4, 8, 16, 32, 64, 128, and ?</option>
-          <option value="1">0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, and ?</option>
-          <option value="2">0, ½, 1, 2, 3, 5, 8, 13, 20, 40, 100, and ?</option> -->
         </select>
             </div>
             <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">Create game</button> or <a href="#">Cancel</a>

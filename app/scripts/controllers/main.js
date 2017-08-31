@@ -109,24 +109,41 @@ angular.module('firePokerApp')
             }
         };
 
+        // enable/disable user as moderator
         $scope.toggleModerator = function (participant) {
             $scope.game.participants[participant.id].moderator = !$scope.game.participants[participant.id].moderator;
         };
 
-        // Load game and register presence
-        $scope.loadGame = function () {
+        // load user from storage
+        $scope.loadUser = function () {
+            var success = false;
             if ($scope.game && $scope.game.participants) {
-                $scope.fp.user = $scope.game.participants[$scope.fp.user.id];
-            }
-            if ($routeParams.gid && $location.path() === '/games/' + $routeParams.gid) {
-                angularFire(ref.child('/games/' + $routeParams.gid), $scope, 'game').then(function () {
-                    // Is current user the game owner?
-                    if ($scope.game.owner && $scope.game.owner.id && $scope.game.owner.id === $scope.fp.user.id) {
-                        $scope.isOwner = true;
-                    } else {
-                        $scope.isOwner = false;
+                angular.forEach($scope.game.participants, function (user) {
+                    if (user.email == $scope.fp.user.email) {
+                        $scope.fp.user = user;
+                        success = true;
                     }
                 });
+            }
+            if (!success) {
+                $cookieStore.remove('fp');
+            }
+            return success;
+        };
+
+        // Load game and register presence
+        $scope.registerPresence = function () {
+            if ($routeParams.gid && ($location.path() === '/games/' + $routeParams.gid)) {
+                if (!$scope.game) {
+                    $scope.loadGame(function () {
+                        // Is current user the game owner?
+                        if ($scope.game.owner && $scope.game.owner.id && $scope.game.owner.id === $scope.fp.user.id) {
+                            $scope.isOwner = true;
+                        } else {
+                            $scope.isOwner = false;
+                        }
+                    });
+                }
                 ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
                 var onlineRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
                 var connectedRef = ref.child('/.info/connected');
@@ -140,6 +157,16 @@ angular.module('firePokerApp')
                 });
             }
         };
+
+        // loads the game, only
+        $scope.loadGame = function (callback) {
+            callback = callback || function () { }
+            if ($routeParams.gid) {
+                angularFire(ref.child('/games/' + $routeParams.gid), $scope, 'game').then(function () {
+                    callback();
+                });
+            }
+        }
 
         // Create game
         $scope.createGame = function () {
@@ -160,6 +187,7 @@ angular.module('firePokerApp')
             newGame.owner = $scope.fp.user;
             newGame.participants = false;
             newGame.estimate = false;
+            $scope.loginerror = false;
             $scope.setNewGame(newGame);
             $cookieStore.put('fp', $scope.fp);
             $location.path('/games/' + $routeParams.gid);
@@ -243,7 +271,6 @@ angular.module('firePokerApp')
                 $scope.game.estimate.results = [];
             }
             $scope.game.estimate.results.push({ points: points, user: $scope.fp.user });
-            $(object).css('selected');
             $scope.fp.user.estimate = points;
         };
 
@@ -261,13 +288,6 @@ angular.module('firePokerApp')
                     }
                 });
             }
-        };
-
-        // Set full name
-        $scope.setFullname = function () {
-            $cookieStore.put('fp', $scope.fp);
-            $location.path('/games/' + $routeParams.gid);
-            $location.replace();
         };
 
         // Get estimate results average
@@ -371,6 +391,7 @@ angular.module('firePokerApp')
                         result &&
                         result.user &&
                         result.user.id &&
+                        $scope.fp.user &&
                         result.user.id === $scope.fp.user.id
                     ) {
                         $scope.showCardDeck = false;
@@ -385,6 +406,7 @@ angular.module('firePokerApp')
             if (
                 $scope.game.estimate &&
                 $scope.game.owner &&
+                $scope.fp.user &&
                 (
                     $scope.game.owner.id === $scope.fp.user.id
                 )
@@ -458,7 +480,7 @@ angular.module('firePokerApp')
 
         // syncs the db with storage
         $scope.syncFp = function () {
-            $scope.fp.user = $scope.game.participants[$scope.fp.user.id];
+            $scope.fp.user = angular.extend($scope.fp.user, $scope.game.participants[$scope.fp.user.id]);
             $cookieStore.put('fp', $scope.fp);
         };
 
@@ -472,7 +494,7 @@ angular.module('firePokerApp')
         $scope.redirectToGameIfFullnameAlreadySet();
 
         // Load game and register presence
-        $scope.loadGame();
+        $scope.registerPresence();
 
         // Update view on game changes
         $scope.$watch('game', function (game) {
