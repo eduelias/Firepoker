@@ -50,10 +50,23 @@ describe('Controller: MainCtrl', function() {
     var VALID_UUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
     // Current valid/available card decks
-    var VALID_CARD_DECKS = [
-        [0, 1, 2, 4, 8, 16, 32, 64, 128, '?'],
-        [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, '?']
-    ];
+    var VALID_CARD_DECKS = $scope.decks = [{
+            id: 0,
+            cards: [0, 1, 2, 4, 8, 16, 32, 64, 128, '?', '☕'],
+            description: '0, 1, 2, 4, 8, 16, 32, 64, 128 and ?,☕'
+        },
+        {
+            id: 1,
+            cards: [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?', '☕'],
+            description: '0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 and ?,☕',
+            average: 'fibonacciAvg'
+        },
+        {
+            id: 2,
+            cards: [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', '☕'],
+            description: '0, ½, 1, 2, 3, 5, 8, 13, 20, 40, 100, and ?,☕'
+        }
+    ]
 
     // Firebase URL
     var FIREBASE_URL = 'https://tr-ppoker.firebaseio.com';

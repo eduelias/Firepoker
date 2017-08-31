@@ -5,17 +5,17 @@ basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'app/components/angular/angular.js',
-  'app/components/angular-mocks/angular-mocks.js',
-  'app/components/angular-cookies/angular-cookies.js',
-  'app/scripts/*.js',
-  'app/scripts/**/*.js',
-  // 'test/mock/**/*.js',
-  'test/spec/**/*.js',
-  'app/components/firebase/firebase.js',
-  'app/components/angularfire/angularFire.js'
+    JASMINE,
+    JASMINE_ADAPTER,
+    'app/components/angular/angular.js',
+    'app/components/angular-mocks/angular-mocks.js',
+    'app/components/angular-cookies/angular-cookies.js',
+    'app/scripts/*.js',
+    'app/scripts/**/*.js',
+    // 'test/mock/**/*.js',
+    'test/spec/**/*.js',
+    'app/components/firebase/firebase.js',
+    'app/components/angularfire/angularFire.js'
 ];
 
 // list of files to exclude
@@ -51,9 +51,9 @@ autoWatch = false;
 // - IE (only Windows)
 
 if (process.env.TRAVIS) {
-  browsers = ['Firefox'];
+    browsers = ['Firefox'];
 } else {
-  browsers = ['Chrome'];
+    browsers = ['C:\\Users\\du7\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe'];
 }
 
 // If browser does not capture in given timeout [ms], kill it
