@@ -57,7 +57,10 @@ if (process.env.TRAVIS) {
 }
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 5000;
+captureTimeout = 30000;
+browserDisconnectTimeout = 10000;
+browserDisconnectTolerance = 1;
+browserNoActivityTimeout = 60000;
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit

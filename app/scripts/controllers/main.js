@@ -12,7 +12,7 @@
 angular.module('firePokerApp')
     .controller('MainCtrl', function($rootScope, $scope, $cookieStore, $location, $routeParams, $timeout, angularFire) {
 
-        // Firebase URL        
+        // Firebase URL
         var URL = 'https://tr-ppoker.firebaseio.com';
 
         // Initialize Firebase
@@ -259,7 +259,7 @@ angular.module('firePokerApp')
         $scope.getResultsAverage = function() {
             var avg = 0;
             if ($scope.game.estimate && $scope.game.estimate.results) {
-                // here, if the deck has an specific calculation, use it                
+                // here, if the deck has an specific calculation, use it
                 var sum = 0;
                 angular.forEach($scope.game.estimate.results, function(result) {
                     if (result.points && angular.isNumber(result.points)) {
