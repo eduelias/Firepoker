@@ -3,10 +3,12 @@
         <!-- Story -->
         <div class="bordered" ng-show="game.estimate">
             <p class="text-right">
-                <span class="label label-success">CURRENT</span>
+                <span class="label label-success over-right">CURRENT</span>
             </p>
-            <h5><span ng-model="game.estimate.title" contenteditable="isOwner" no-line-breaks="true">{{game.estimate.title}}</span></h5>
-            <p><span ng-model="game.estimate.notes" contenteditable="isOwner" contenteditable="true">{{game.estimate.notes}}</span></p>
+            <h3 ng-show="isOwner || fp.user.moderator"><span ng-model="game.estimate.title" contenteditable="true" ng-show="isOwner || fp.user.moderator">{{game.estimate.title}}</span></h3>
+            <h3 ng-hide="isOwner || fp.user.moderator"><span ng-model="game.estimate.title" contenteditable="false" ng-hide="isOwner || fp.user.moderator">{{game.estimate.title}}</span></h3>
+            <p ng-show="isOwner || fp.user.moderator"><span ng-model="game.estimate.notes" contenteditable="true" ng-show="isOwner || fp.user.moderator">{{game.estimate.notes}}</span></p>
+            <!-- <p ng-hide="isOwner || fp.user.moderator"><span ng-model="game.estimate.notes" contenteditable="false" ng-hide="isOwner || fp.user.moderator">{{game.estimate.notes}}</span></p> -->
         </div>
         <!-- Estimate story -->
         <div ng-show="game.estimate">
@@ -74,8 +76,8 @@
                     <div ng-repeat="story in game.stories | orderBy:'endedAt'" class="stories">
                         <div ng-show="story.status == 'closed'" class="bordered">
                             <p class="text-right">Estimated: <span class="label label-danger">{{story.points || 0}}</span></p>
-                            <h5 ng-bind-html-unsafe="story.title"></h5>
-                            <p ng-bind-html-unsafe="store.notes"></p>
+                            <h5>{{story.title}}</h5>
+                            <p ng-show="isOwner || fp.user.moderator">{{story.notes}}</p>
                         </div>
                     </div>
                 </div>

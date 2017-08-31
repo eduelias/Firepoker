@@ -109,14 +109,14 @@ angular.module('firePokerApp')
             }
         };
 
-        // set as observer
-        $scope.observe = function(participant) {
-            // $scope.game.participants[participant.id].isObserver = true;
-            console.log(participant);
+        $scope.toggleModerator = function(participant) {
+            $scope.game.participants[participant.id].moderator = !$scope.game.participants[participant.id].moderator
         };
 
         // Load game and register presence
         $scope.loadGame = function() {
+            if ($scope.game && $scope.game.participants)
+                $scope.fp.user = $scope.game.participants[$scope.fp.user.id];
             if ($routeParams.gid && $location.path() === '/games/' + $routeParams.gid) {
                 angularFire(ref.child('/games/' + $routeParams.gid), $scope, 'game').then(function() {
                     // Is current user the game owner?
@@ -129,7 +129,6 @@ angular.module('firePokerApp')
                 ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
                 var onlineRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
                 var activeRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/active');
-                var moderRef = ref.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/moderator');
                 var connectedRef = ref.child('/.info/connected');
                 connectedRef.on('value', function(snap) {
                     if (snap.val() === true) {
@@ -137,8 +136,6 @@ angular.module('firePokerApp')
                         // tell the server to set a timestamp when we leave.
                         onlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
                         onlineRef.set(true);
-                        activeRef.set(true);
-                        moderRef.set(false);
                     }
                 });
             }
@@ -374,8 +371,7 @@ angular.module('firePokerApp')
                 $scope.game.estimate &&
                 $scope.game.owner &&
                 (
-                    $scope.game.owner.id === $scope.fp.user.id ||
-                    $scope.fp.user.active === false
+                    $scope.game.owner.id === $scope.fp.user.id
                 )
             ) {
                 $scope.showSelectEstimate = true;
@@ -442,6 +438,12 @@ angular.module('firePokerApp')
             $location.replace();
         };
 
+        // syncs the db with storage
+        $scope.syncFp = function() {
+            $scope.fp.user = $scope.game.participants[$scope.fp.user.id];
+            $cookieStore.put('fp', $scope.fp);
+        };
+
         // Redirect with a GID to create new games
         $scope.redirectToCreateNewGame();
 
@@ -466,6 +468,7 @@ angular.module('firePokerApp')
             $scope.setDisablePlayAgainAndRevealButtons();
             $scope.setShowCards();
             $scope.setUnestimatedStoryCount();
+            $scope.syncFp();
         });
 
     });

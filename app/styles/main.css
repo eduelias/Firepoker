@@ -28,8 +28,8 @@ body {
 
 .bordered {
     position: relative;
-    padding: 15px 15px 15px;
-    margin: 0 -15px 15px;
+    padding: 0px 15px 0px;
+    margin: 0 0px 15px;
     margin-left: 0;
     margin-right: 0;
     background-color: #fff;
@@ -309,19 +309,28 @@ span:focus:hover {
     opacity: 0.3;
 }
 
-.glyphicon {
-    margin: 4px;
-}
-
 .clickable {
     cursor: pointer;
 }
 
-.list-unstyled .glyphicon {
-    font-size: 1.5em;
+.over-right {
+    margin-top: -8px;
+    float: right;
 }
 
-.glyphicon-eye-open,
-.glyphicon-eye-close {
+.big-font {
+    font-size: 1.3em;
+}
+
+.glyphicon {
+    margin: 2px 2px 10px 2px;
     top: 4px;
+}
+
+.fonticon {
+    display: inline-block;
+    position: relative;
+    font-size: 1.55em;
+    top: 2px;
+    margin-right: 2px;
 }
