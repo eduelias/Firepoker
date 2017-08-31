@@ -267,7 +267,7 @@ angular.module('firePokerApp')
                     }
                 });
                 avg = Math.ceil(sum / $scope.game.estimate.results.length);
-                if ($scope.decks[$scope.game.deck.id].average) {
+                if ($scope.decks[$scope.game.deck.id] && $scope.decks[$scope.game.deck.id].average) {
                     avg = $scope[$scope.decks[$scope.game.deck.id].average](avg);
                 }
             }
@@ -343,8 +343,8 @@ angular.module('firePokerApp')
         // Set Defaults
         $scope.newGame = { deck: $scope.decks[1] };
         $scope.showCardDeck = true;
-        $scope.showSelectEstimate = true;
-        $scope.disablePlayAgainAndRevealButtons = true;
+        $scope.showSelectEstimate = false;
+        $scope.disablePlayAgainAndRevealButtons = false;
         $scope.showCards = false;
 
         // Set card deck visibility
