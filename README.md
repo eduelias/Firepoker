@@ -1,4 +1,4 @@
-Firepoker [![Build Status](https://travis-ci.org/Wizehive/Firepoker.png?branch=master)](https://travis-ci.org/Wizehive/Firepoker) [![Code Climate](https://codeclimate.com/github/Wizehive/Firepoker/badges/gpa.svg)](https://codeclimate.com/github/Wizehive/Firepoker)
+Firepoker [![Build Status](https://travis-ci.org/eduelias/Firepoker.png?branch=master)](https://travis-ci.org/Wizehive/Firepoker) [![Code Climate](https://codeclimate.com/github/eduelias/Firepoker/badges/gpa.svg)](https://codeclimate.com/github/Wizehive/Firepoker)
 =========
 
 Agile Planning Poker® powered by Firebase and AngularJS
@@ -13,7 +13,7 @@ To read more, check out the [Wikipedia](http://en.wikipedia.org/wiki/Planning_po
 Getting Started
 =========
 
-* Clone the repository: `git clone https://github.com/Wizehive/Firepoker.git`
+* Clone the repository: `git clone https://github.com/eduelias/Firepoker.git`
 * Install with [NPM](https://github.com/isaacs/npm): `npm install`
 * Install with [Bower](https://github.com/bower/bower): `bower install`
 * To run the local server: `grunt server`
@@ -24,7 +24,7 @@ Contributing
 
 Anyone and everyone is welcome to contribute. Clone the repository and fire your pull requests.
 
-Think you've found a bug or have a new feature to suggest? Let us know! [Open an issue](https://github.com/Wizehive/Firepoker/issues).
+Think you've found a bug or have a new feature to suggest? Let us know! [Open an issue](https://github.com/eduelias/Firepoker/issues).
 
 Legal and License
 =========
