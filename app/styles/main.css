@@ -309,6 +309,10 @@ span:focus:hover {
     opacity: 0.3;
 }
 
+.selected {
+    background-color: black;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -333,4 +337,14 @@ span:focus:hover {
     font-size: 1.55em;
     top: 2px;
     margin-right: 2px;
+}
+
+.unvote {
+    float: right;
+    margin-top: -38px;
+    margin-right: -8px;
+    font-size: 0.5em;
+    padding: 1px;
+    width: 16px;
+    height: 18px;
 }

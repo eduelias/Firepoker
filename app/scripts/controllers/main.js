@@ -159,7 +159,6 @@ angular.module('firePokerApp')
             newGame.created = new Date().getTime();
             newGame.owner = $scope.fp.user;
             newGame.participants = false;
-            newGame.observers = false;
             newGame.estimate = false;
             $scope.setNewGame(newGame);
             $cookieStore.put('fp', $scope.fp);
@@ -224,12 +223,28 @@ angular.module('firePokerApp')
             $scope.game.stories.splice(index, 1);
         };
 
+        // removes a vote
+        $scope.unvote = function (voter) {
+            if ($scope.game.participants[voter.id].hasVoted && $scope.game && $scope.game.estimate && $scope.game.estimate.results) {
+                angular.forEach($scope.game.estimate.results, function (vote) {
+                    if (vote.user.id == $scope.game.participants[voter.id].id) {
+                        var index = $scope.game.estimate.results.indexOf(vote);
+                        $scope.game.estimate.results.splice(index, 1);
+                        $scope.game.participants[voter.id].hasVoted = false;
+                        return;
+                    }
+                });
+            }
+        };
+
         // Estimate story
-        $scope.estimate = function (points) {
+        $scope.estimate = function (points, object) {
             if (!$scope.game.estimate.results) {
                 $scope.game.estimate.results = [];
             }
             $scope.game.estimate.results.push({ points: points, user: $scope.fp.user });
+            $(object).css('selected');
+            $scope.fp.user.estimate = points;
         };
 
         // Show checkmarks when participant has voted
