@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('firePokerApp', ['firebase', 'ngCookies'])
-    .config(function ($routeProvider) {
+    .config(function($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/games/index.html',
@@ -23,4 +23,3 @@ angular.module('firePokerApp', ['firebase', 'ngCookies'])
                 redirectTo: '/'
             });
     });
-
