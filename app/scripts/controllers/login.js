@@ -1,3 +1,4 @@
+/*global angular*/
 'use strict';
 
 /**
@@ -25,33 +26,6 @@ angular.module('firePokerApp')
             angularFire: angularFire,
             utils: utils
         });
-
-        // load user from storage
-        $scope.loadUser = function() {
-            var success = false;
-            if ($scope.game && $scope.game.participants) {
-                angular.forEach($scope.game.participants, function(user) {
-                    if (user.email === $scope.fp.user.email) {
-                        $scope.fp.user = user;
-                        success = true;
-                    }
-                });
-            }
-            if (!success) {
-                $cookieStore.remove('fp');
-            }
-            return success;
-        };
-
-        // loads the game, only
-        $scope.loadGame = function(callback) {
-            callback = callback || function() {}
-            if ($routeParams.gid) {
-                angularFire(utils.firebase.child('/games/' + $routeParams.gid), $scope, 'game').then(function() {
-                    callback();
-                });
-            }
-        }
 
         // Set full name
         $scope.setFullname = function() {
