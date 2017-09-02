@@ -16,7 +16,7 @@
  */
 angular.module('firePokerApp')
     .controller('LoginCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, angularFire, utils) {
-        $controller('PresetCtrl', {
+        $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
             $scope: $scope,

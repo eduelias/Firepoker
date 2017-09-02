@@ -7,21 +7,21 @@
 /*global xit*/
 'use strict';
 /**
- * MainCtrl Unit Tests
+ * NewCtrl Unit Tests
  *
  * @fileoverview Tests the controller methods
  * @version 0.3.0
  * @author Everton Yoshitani <everton@wizehive.com>
  * @todo add remain unit tests and perfect after learn' more about testing
  */
-describe('Controller: MainCtrl', function() {
+describe('Controller: NewCtrl', function() {
     // Load the controller's module
     beforeEach(module('firePokerApp'));
     beforeEach(module('firebase'));
     beforeEach(module('ngCookies'));
 
     // Initialize objects
-    var MainCtrl,
+    var NewCtrl,
         scope,
         rootScope,
         location,
@@ -44,7 +44,7 @@ describe('Controller: MainCtrl', function() {
         location = $location;
         routeParams = $routeParams;
         cookieStore = $cookieStore;
-        MainCtrl = $controller('MainCtrl', {
+        NewCtrl = $controller('NewCtrl', {
             $scope: scope,
             $location: location
         });
@@ -162,24 +162,6 @@ describe('Controller: MainCtrl', function() {
             'deck': VALID_CARD_DECKS[0]
         };
     };
-
-    it('should set an user id (UID) if empty', function() {
-        expect(scope.fp.user.id).toMatch(VALID_UUID);
-    });
-
-    it('should set a group id (GID) if empty', function() {
-        expect(scope.fp.gid).toMatch(VALID_UUID);
-    });
-
-    it('should return false if path equals to `/` when calling isLandingPage()', function() {
-        location.path('/');
-        expect(rootScope.isLandingPage()).toBe(false);
-    });
-
-    it('should return true if path equals to `/` when calling isLandingPage()', function() {
-        location.path('/games');
-        expect(rootScope.isLandingPage()).toEqual(true);
-    });
 
     it('should redirect to create a new game with a new GID', function() {
         var oldGID = scope.fp.gid;
@@ -311,154 +293,7 @@ describe('Controller: MainCtrl', function() {
         expect(scope.game.estimate).toEqual(scope.game.stories[id]);
     });
 
-    it('should allow users to set stories for estimating', function() {
-        setTestGame();
-        //var currentStory = scope.game.estimate;
-        var newStoryId = 1;
-        var now = new Date().getTime() - 1;
-        spyOn(scope, 'cancelRound');
-        scope.setStory(newStoryId);
-        expect(scope.cancelRound).toHaveBeenCalled();
-        expect(scope.game.estimate.title).toEqual(scope.game.stories[newStoryId].title);
-        expect(scope.game.estimate.id).toEqual(newStoryId);
-        expect(scope.game.estimate.status).toEqual('active');
-        expect(scope.game.estimate.startedAt).toBeGreaterThan(now);
-        expect(scope.game.estimate.endedAt).toBe(false);
-    });
-
-    it('should allow the game owner to delete stories', function() {
-        setTestGame();
-        var totalOfStories = scope.game.stories.length;
-        var firstStoryTitle = scope.game.stories[0].title;
-        scope.deleteStory(0);
-        expect(scope.game.stories.length).toEqual(totalOfStories - 1);
-        expect(scope.game.stories[0].title).not.toEqual(firstStoryTitle);
-    });
-
-    it('should allow users to set their full names', function() {
-        // //this should go to the login controller
-        // spyOn(cookieStore, 'put');
-        // spyOn(location, 'path').andCallFake(new LocationMock().path);
-        // spyOn(location, 'replace');
-        // routeParams.gid = scope.fp.gid;
-        // scope.setFullname();
-        // expect(cookieStore.put).toHaveBeenCalledWith('fp', scope.fp);
-        // expect(location.path).toHaveBeenCalledWith('/games/' + routeParams.gid);
-        // expect(location.replace).toHaveBeenCalled();
-    });
-
-    it('should calculate the results average points', function() {
-        setTestGame();
-        expect(scope.getResultsAverage()).toBe(11);
-    });
-
-    it('should give the total number of active participants in the game', function() {
-        setTestGame();
-        expect(scope.totalOfOnlineParticipants()).toBe(3);
-    });
-
-    it('should allow the game owner to accept the round', function() {
-        setTestGame();
-        var now = new Date().getTime() - 1;
-        var idx = scope.game.estimate.id;
-        scope.newEstimate = { points: 10 };
-        scope.acceptRound();
-        expect(scope.game.stories[idx].endedAt).toBeGreaterThan(now);
-        expect(scope.game.stories[idx].status).toBe('closed');
-        expect(scope.game.estimate).toBe(false);
-    });
-
-    it('should allow the game owner to play again the round', function() {
-        setTestGame();
-        scope.playAgain();
-        expect(scope.game.estimate.results).toEqual([]);
-    });
-
-    it('should allow the game owner to cancel the round', function() {
-        setTestGame();
-        var idx = scope.game.estimate.id;
-        scope.cancelRound();
-        expect(scope.game.estimate).toBe(false);
-        expect(scope.game.stories[idx].startedAt).toBe(false);
-        expect(scope.game.stories[idx].endedAt).toBe(false);
-        expect(scope.game.stories[idx].status).toBe('queue');
-    });
-
-    it('should allow the game owner to reveal the cards in the round', function() {
-        setTestGame();
-        scope.revealCards();
-        expect(scope.game.estimate.status).toBe('reveal');
-    });
-
-    it('should set a card deck array that can be used in games', function() {
-        expect(scope.decks).toEqual(VALID_CARD_DECKS);
-    });
-
     it('should set a default `newGame` value', function() {
         expect(scope.newGame).toEqual({ deck: VALID_CARD_DECKS[1] });
     });
-
-    it('should set a default `showCardDeck` value', function() {
-        expect(scope.showCardDeck).toBe(true);
-    });
-
-    it('should set a default `showSelectEstimate` value', function() {
-        expect(scope.showSelectEstimate).toBe(false);
-    });
-
-    it('should set a default `disablePlayAgainAndRevealButtons` value', function() {
-        expect(scope.disablePlayAgainAndRevealButtons).toBe(false);
-    });
-
-    it('should set a default `showCards` value', function() {
-        expect(scope.showCards).toBe(false);
-    });
-
-    it('should set `showCardDeck` to false if the user already estimated the story', function() {
-        setTestGame();
-        scope.game.estimate.results[0].user.id = scope.fp.user.id;
-        scope.setShowCardDeck();
-        expect(scope.showCardDeck).toBe(false);
-    });
-
-    it('should set `showSelectEstimate` to true if the user is the game owner', function() {
-        setTestGame();
-        scope.game.owner.id = scope.fp.user.id;
-        scope.setShowSelectEstimate();
-        expect(scope.showSelectEstimate).toBe(true);
-    });
-
-    it('should set `newEstimate` average points', function() {
-        setTestGame();
-        scope.setNewEstimate();
-        expect(scope.newEstimate).toEqual({ points: scope.getResultsAverage() });
-    });
-
-    it('should set `disablePlayAgainAndRevealButtons` to true if the estimate results are empty', function() {
-        setTestGame();
-        scope.game.estimate.results = [];
-        scope.setDisablePlayAgainAndRevealButtons();
-        expect(scope.disablePlayAgainAndRevealButtons).toBe(true);
-    });
-
-    it('should set `disablePlayAgainAndRevealButtons` to true if the estimate results is not set', function() {
-        setTestGame();
-        delete scope.game.estimate.results;
-        scope.setDisablePlayAgainAndRevealButtons();
-        expect(scope.disablePlayAgainAndRevealButtons).toBe(true);
-    });
-
-    it('should set `showCards` to true if the current round status is equal to `reveal`', function() {
-        setTestGame();
-        scope.game.estimate.status = 'reveal';
-        scope.setShowCards();
-        expect(scope.showCards).toBe(true);
-    });
-
-    // it('should set `showCards` to true if all participants estimated the current round', function() {
-    //     setTestGame();
-    //     scope.setShowCards();
-    //     expect(scope.showCards).toBe(true);
-    // });
-
 });

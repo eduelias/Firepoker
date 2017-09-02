@@ -9,11 +9,11 @@ angular.module('firePokerApp', ['firebase', 'ngCookies'])
             })
             .when('/games/new/:gid', {
                 templateUrl: 'views/games/new.html',
-                controller: 'MainCtrl'
+                controller: 'NewCtrl'
             })
             .when('/games/:gid', {
-                templateUrl: 'views/games/view.html',
-                controller: 'MainCtrl'
+                templateUrl: 'views/games/play.html',
+                controller: 'PlayCtrl'
             })
             .when('/games/join/:gid', {
                 templateUrl: 'views/games/join.html',
