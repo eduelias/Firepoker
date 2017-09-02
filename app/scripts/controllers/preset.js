@@ -87,6 +87,22 @@ angular.module('firePokerApp')
             }
         };
 
+        // try to load user by its email
+        $scope.setEmail = function() {
+            if ($scope.loadUser()) {
+                $scope.setFullname();
+            } else {
+                $scope.loginerror = "Game or user not found";
+            }
+        };
+
+        // Set full name
+        $scope.setFullname = function() {
+            $cookieStore.put('fp', $scope.fp);
+            $location.path('/games/' + $routeParams.gid);
+            $location.replace();
+        };
+
         // Redirect to set fullname if empty
         $scope.redirectToSetFullnameIfEmpty = function() {
             if (
@@ -269,30 +285,31 @@ angular.module('firePokerApp')
             return avg;
         };
 
-        // Get total of active participants
-        $scope.totalOfOnlineParticipants = function() {
+        // count the participants by a comparer function
+        $scope.countParticipantsByFilter = function(comparator) {
             var totalOfOnlineParticipants = 0;
             if ($scope.game && $scope.game.participants) {
                 angular.forEach($scope.game.participants, function(participant) {
-                    if (participant.online === true && participant.active === true) {
+                    if (comparator(participant)) {
                         totalOfOnlineParticipants++;
                     }
                 });
             }
             return totalOfOnlineParticipants;
+        }
+
+        // Get total of active participants
+        $scope.totalOfOnlineParticipants = function() {
+            return $scope.countParticipantsByFilter(function(participant) {
+                return participant.online === true && participant.active === true;
+            });
         };
 
         // Get total of observers
         $scope.totalOfObservers = function() {
-            var totalOfOnlineParticipants = 0;
-            if ($scope.game && $scope.game.participants) {
-                angular.forEach($scope.game.participants, function(participant) {
-                    if (participant.online === true && participant.active === false) {
-                        totalOfOnlineParticipants++;
-                    }
-                });
-            }
-            return totalOfOnlineParticipants;
+            return $scope.countParticipantsByFilter(function(participant) {
+                return participant.online === true && participant.active === false;
+            });
         };
 
         // Accept

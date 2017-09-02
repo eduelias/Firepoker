@@ -27,24 +27,6 @@ angular.module('firePokerApp')
             utils: utils
         });
 
-        // Set full name
-        $scope.setFullname = function() {
-            $cookieStore.put('fp', $scope.fp);
-            $location.path('/games/' + $routeParams.gid);
-            $location.replace();
-        };
-
-        // try to load user by its email
-        $scope.setEmail = function() {
-            if ($scope.loadUser()) {
-                $cookieStore.put('fp', $scope.fp);
-                $location.path('/games/' + $routeParams.gid);
-                $location.replace();
-            } else {
-                $scope.loginerror = "Game or user not found";
-            }
-        };
-
         // loads the game if one were provided
         $scope.loadGame();
 
