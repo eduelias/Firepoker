@@ -12,7 +12,7 @@
  * @author Everton Yoshitani <everton@wizehive.com>
  */
 angular.module('firePokerApp')
-    .controller('PlayCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, angularFire, utils) {
+    .controller('PlayCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
         $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
@@ -20,7 +20,6 @@ angular.module('firePokerApp')
             $cookieStore: $cookieStore,
             $location: $location,
             $routeParams: $routeParams,
-            angularFire: angularFire,
             utils: utils
         });
 
@@ -35,14 +34,14 @@ angular.module('firePokerApp')
                 if (!$scope.game) {
                     $scope.loadGame($scope.SetIsOwner);
                 }
-                utils.firebase.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
-                var onlineRef = utils.firebase.child('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
-                var connectedRef = utils.firebase.child('/.info/connected');
+                utils.firebase.database().ref('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
+                var onlineRef = utils.firebase.database().ref('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
+                var connectedRef = utils.firebase.database().ref('/.info/connected');
                 connectedRef.on('value', function(snap) {
                     if (snap.val() === true) {
                         // We're connected (or reconnected)!  Set up our presence state and
                         // tell the server to set a timestamp when we leave.
-                        onlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+                        onlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
                         onlineRef.set(true);
                     }
                 });

@@ -15,7 +15,7 @@
  * @author Eduardo Elias Saleh <du7@msn.com>
  */
 angular.module('firePokerApp')
-    .controller('NewCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, angularFire, utils) {
+    .controller('NewCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
         $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
@@ -23,13 +23,12 @@ angular.module('firePokerApp')
             $cookieStore: $cookieStore,
             $location: $location,
             $routeParams: $routeParams,
-            angularFire: angularFire,
             utils: utils
         });
 
         // Set new game
         $scope.setNewGame = function(game) {
-            utils.firebase.child('/games/' + $routeParams.gid).set(game);
+            utils.firebase.database().ref('/games/' + $routeParams.gid).set(game);
         };
 
         // Create game

@@ -20,8 +20,7 @@
 angular.module('firePokerApp')
     .controller('CommonCtrl', function(
         $controller,
-        $rootScope, $scope, $cookieStore, $location, $routeParams, angularFire, utils) {
-
+        $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
         // Load cookies
         $scope.fp = $cookieStore.get('fp');
         if (!$scope.fp) {
@@ -153,8 +152,12 @@ angular.module('firePokerApp')
         $scope.loadGame = function(callback) {
             callback = callback || function() {}
             if ($routeParams.gid) {
-                angularFire(utils.firebase.child('/games/' + $routeParams.gid), $scope, 'game').then(function() {
-                    callback();
+                var connectedRef = utils.firebase.database().ref('/games/' + $routeParams.gid);
+                connectedRef.on('value', function(snap) {
+                    if (snap.val() === true) {
+                        $scope.game = snap.val();
+                        callback();
+                    }
                 });
             }
         };

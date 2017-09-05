@@ -17,7 +17,7 @@
 describe('Controller: PlayCtrl', function() {
     // Load the controller's module
     beforeEach(module('firePokerApp'));
-    beforeEach(module('firebase'));
+    //beforeEach(module('firebase'));
     beforeEach(module('ngCookies'));
     beforeEach(module('ngRoute'));
 

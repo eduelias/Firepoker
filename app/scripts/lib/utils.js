@@ -9,7 +9,7 @@
 angular.module('firePokerApp')
     .factory('utils', function() {
         return {
-            URL: 'https://tr-ppoker.firebaseio.com',
+            app: null,
             s4: function() {
                 return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
             },
@@ -20,6 +20,19 @@ angular.module('firePokerApp')
                     this.s4() + '-' + this.s4() + '-' + this.s4() +
                     '-' + this.s4() + this.s4() + this.s4();
             },
-            get firebase() { return new Firebase(this.URL); }
+            get firebase() {
+                if (!this.app) {
+                    var config = {
+                        apiKey: "AIzaSyCCfiXucRTg3aSlb8cQYbKqUWRUjWsrGXE",
+                        authDomain: "tr-ppoker.firebaseapp.com",
+                        databaseURL: "https://tr-ppoker.firebaseio.com",
+                        projectId: "tr-ppoker",
+                        storageBucket: "tr-ppoker.appspot.com",
+                        messagingSenderId: "86189525068"
+                    };
+                    this.app = firebase.initializeApp(config);
+                }
+                return this.app;
+            }
         }
-    })
+    });

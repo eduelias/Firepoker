@@ -21,9 +21,7 @@ module.exports = function(config) {
             'app/scripts/*.js',
             'app/scripts/**/*.js',
             // 'test/mock/**/*.js',
-            'test/spec/**/*.js',
-            'app/components/firebase/firebase.js',
-            'app/components/angularfire/angularFire.js'
+            'test/spec/**/*.js'
         ],
 
         // debug with vs

@@ -1,10 +1,12 @@
 'use strict';
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
-var mountFolder = function (connect, dir) {
-    return connect.static(require('path').resolve(dir));
+var serveStatic = require('serve-static');
+//var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+var mountFolder = function(connect, dir) {
+    return serveStatic(dir);
+    //return connect.static(require('path').resolve(dir));
 };
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -14,12 +16,21 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
-    // try {
-    //   yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
-    // } catch (e) {}
+    try {
+        yeomanConfig.app = require('./bower.json').appPath || yeomanConfig.app;
+    } catch (e) {}
 
     grunt.initConfig({
         yeoman: yeomanConfig,
+        wiredep: {
+            directory: 'app/components',
+            target: {
+                src: 'index.html' // point to your HTML file.
+            },
+            options: {
+                cwd: '.'
+            }
+        },
         watch: {
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -51,9 +62,9 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    middleware: function (connect) {
+                    middleware: function(connect) {
                         return [
-                            lrSnippet,
+                            connect().use('/components', serveStatic('.app/components')),
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, yeomanConfig.app)
                         ];
@@ -62,7 +73,7 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
-                    middleware: function (connect) {
+                    middleware: function(connect) {
                         return [
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, 'test')
@@ -313,5 +324,4 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('default', ['build']);
-
 };

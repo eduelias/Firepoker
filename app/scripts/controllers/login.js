@@ -15,7 +15,7 @@
  * @author Eduardo Elias Saleh <du7@msn.com>
  */
 angular.module('firePokerApp')
-    .controller('LoginCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, angularFire, utils) {
+    .controller('LoginCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
         $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
@@ -23,7 +23,6 @@ angular.module('firePokerApp')
             $cookieStore: $cookieStore,
             $location: $location,
             $routeParams: $routeParams,
-            angularFire: angularFire,
             utils: utils
         });
 
