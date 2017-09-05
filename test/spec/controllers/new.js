@@ -19,6 +19,7 @@ describe('Controller: NewCtrl', function() {
     beforeEach(module('firePokerApp'));
     beforeEach(module('firebase'));
     beforeEach(module('ngCookies'));
+    beforeEach(module('ngRoute'));
 
     // Initialize objects
     var NewCtrl,
@@ -165,14 +166,14 @@ describe('Controller: NewCtrl', function() {
 
     it('should redirect to create a new game with a new GID', function() {
         var oldGID = scope.fp.gid;
-        spyOn(location, 'path').andCallFake(new LocationMock().path);
+        spyOn(location, 'path').and.callFake(new LocationMock().path);
         spyOn(location, 'replace');
         location.path('/games/new');
         scope.redirectToCreateNewGame();
         expect(scope.fp.gid).not.toBe(oldGID);
         expect(scope.fp.gid).toMatch(VALID_UUID);
-        expect(location.path.calls.length).toBe(3);
-        expect(location.replace.calls.length).toBe(1);
+        expect(location.path.calls.count()).toBe(3);
+        expect(location.replace.calls.count()).toBe(1);
         expect(location.path).toHaveBeenCalledWith('/games/new');
         expect(location.path).toHaveBeenCalledWith();
         expect(location.path).toHaveBeenCalledWith('/games/new/' + scope.fp.gid);
@@ -182,13 +183,13 @@ describe('Controller: NewCtrl', function() {
     it('should redirect to set fullname if empty', function() {
         routeParams.gid = scope.fp.gid;
         scope.fp.user.fullname = null;
-        spyOn(location, 'path').andCallFake(new LocationMock().path);
+        spyOn(location, 'path').and.callFake(new LocationMock().path);
         spyOn(location, 'replace');
         location.path('/games/' + routeParams.gid);
         scope.redirectToSetFullnameIfEmpty();
         expect(routeParams.gid).toBe(scope.fp.gid);
-        expect(location.path.calls.length).toBe(3);
-        expect(location.replace.calls.length).toBe(1);
+        expect(location.path.calls.count()).toBe(3);
+        expect(location.replace.calls.count()).toBe(1);
         expect(location.path).toHaveBeenCalledWith('/games/' + routeParams.gid);
         expect(location.path).toHaveBeenCalledWith();
         expect(location.path).toHaveBeenCalledWith('/games/join/' + routeParams.gid);
@@ -218,9 +219,9 @@ describe('Controller: NewCtrl', function() {
             scope.game = game;
         };
         var now = new Date().getTime() - 1;
-        spyOn(scope, 'setNewGame').andCallFake(setNewGameMock);
+        spyOn(scope, 'setNewGame').and.callFake(setNewGameMock);
         spyOn(cookieStore, 'put');
-        spyOn(location, 'path').andCallFake(new LocationMock().path);
+        spyOn(location, 'path').and.callFake(new LocationMock().path);
         spyOn(location, 'replace');
         scope.newGame = newGame;
         routeParams.gid = scope.fp.gid;
@@ -232,9 +233,9 @@ describe('Controller: NewCtrl', function() {
         expect(scope.game.participants).toBe(false);
         expect(scope.game.estimate).toBe(false);
         expect(scope.game.deck.id).toBe(0);
-        expect(cookieStore.put.calls.length).toBe(1);
-        expect(location.path.calls.length).toBe(1);
-        expect(location.replace.calls.length).toBe(1);
+        expect(cookieStore.put.calls.count()).toBe(1);
+        expect(location.path.calls.count()).toBe(1);
+        expect(location.replace.calls.count()).toBe(1);
         expect(cookieStore.put).toHaveBeenCalledWith('fp', scope.fp);
         expect(location.path).toHaveBeenCalledWith('/games/' + routeParams.gid);
         expect(location.replace).toHaveBeenCalled();

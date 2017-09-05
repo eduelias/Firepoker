@@ -1,67 +1,96 @@
 // Karma configuration
+// Generated on Tue Sep 05 2017 09:53:02 GMT-0300 (E. South America Standard Time)
+'use strict'
 
-// base path, that will be used to resolve files and exclude
-basePath = '';
+module.exports = function(config) {
+    config.set({
 
-// list of files / patterns to load in the browser
-files = [
-    JASMINE,
-    JASMINE_ADAPTER,
-    'app/components/angular/angular.js',
-    'app/components/angular-mocks/angular-mocks.js',
-    'app/components/angular-cookies/angular-cookies.js',
-    'app/scripts/*.js',
-    'app/scripts/**/*.js',
-    // 'test/mock/**/*.js',
-    'test/spec/**/*.js',
-    'app/components/firebase/firebase.js',
-    'app/components/angularfire/angularFire.js'
-];
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: '',
 
-// list of files to exclude
-exclude = [];
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+        frameworks: ['jasmine'],
 
-// test results reporter to use
-// possible values: dots || progress || growl
-reporters = ['progress'];
+        // list of files / patterns to load in the browser
+        files: [
+            'app/components/angular/angular.js',
+            'app/components/angular-route/angular-route.js',
+            'app/components/angular-mocks/angular-mocks.js',
+            'app/components/angular-cookies/angular-cookies.js',
+            'app/scripts/*.js',
+            'app/scripts/**/*.js',
+            // 'test/mock/**/*.js',
+            'test/spec/**/*.js',
+            'app/components/firebase/firebase.js',
+            'app/components/angularfire/angularFire.js'
+        ],
 
-// web server port
-port = 8080;
+        // debug with vs
+        customLaunchers: {
+            ChromeDebugging: {
+                base: 'Chrome',
+                flags: ['--remote-debugging-port=9333']
+            }
+        },
 
-// cli runner port
-runnerPort = 9100;
+        // list of files to exclude
+        exclude: [],
 
-// enable / disable colors in the output (reporters and logs)
-colors = true;
 
-// level of logging
-// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
+        // preprocess matching files before serving them to the browser
+        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+        preprocessors: {},
 
-// enable / disable watching file and executing tests whenever any file changes
-autoWatch = false;
 
-// Start these browsers, currently available:
-// - Chrome
-// - ChromeCanary
-// - Firefox
-// - Opera
-// - Safari (only Mac)
-// - PhantomJS
-// - IE (only Windows)
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['progress'],
 
-if (process.env.TRAVIS) {
-    browsers = ['Firefox'];
-} else {
-    browsers = ['C:\\Users\\du7\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe'];
+        // web server port
+        port: 9000,
+
+        // cli runner port
+        runnerPort: 9000,
+
+        // web server port
+        //port: 9876,
+
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
+
+
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_INFO,
+
+
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
+
+
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+        get browsers() {
+            if (process.env.TRAVIS) {
+                return ['Firefox'];
+            } else {
+                return ['ChromeDebugging'];
+            }
+        },
+
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: true,
+
+        captureTimeout: 30000,
+        browserDisconnectTimeout: 1000,
+        browserDisconnectTolerance: 1,
+        browserNoActivityTimeout: 6000,
+
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity
+    })
 }
-
-// If browser does not capture in given timeout [ms], kill it
-captureTimeout = 30000;
-browserDisconnectTimeout = 10000;
-browserDisconnectTolerance = 1;
-browserNoActivityTimeout = 60000;
-
-// Continuous Integration mode
-// if true, it capture browsers, run tests and exit
-singleRun = true;

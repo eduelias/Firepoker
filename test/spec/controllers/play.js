@@ -19,6 +19,7 @@ describe('Controller: PlayCtrl', function() {
     beforeEach(module('firePokerApp'));
     beforeEach(module('firebase'));
     beforeEach(module('ngCookies'));
+    beforeEach(module('ngRoute'));
 
     // Initialize objects
     var PlayCtrl,
@@ -183,14 +184,14 @@ describe('Controller: PlayCtrl', function() {
 
     it('should redirect to create a new game with a new GID', function() {
         var oldGID = scope.fp.gid;
-        spyOn(location, 'path').andCallFake(new LocationMock().path);
+        spyOn(location, 'path').and.callFake(new LocationMock().path);
         spyOn(location, 'replace');
         location.path('/games/new');
         scope.redirectToCreateNewGame();
         expect(scope.fp.gid).not.toBe(oldGID);
         expect(scope.fp.gid).toMatch(VALID_UUID);
-        expect(location.path.calls.length).toBe(3);
-        expect(location.replace.calls.length).toBe(1);
+        expect(location.path.calls.count()).toBe(3);
+        expect(location.replace.calls.count()).toBe(1);
         expect(location.path).toHaveBeenCalledWith('/games/new');
         expect(location.path).toHaveBeenCalledWith();
         expect(location.path).toHaveBeenCalledWith('/games/new/' + scope.fp.gid);
@@ -200,13 +201,13 @@ describe('Controller: PlayCtrl', function() {
     it('should redirect to set fullname if empty', function() {
         routeParams.gid = scope.fp.gid;
         scope.fp.user.fullname = null;
-        spyOn(location, 'path').andCallFake(new LocationMock().path);
+        spyOn(location, 'path').and.callFake(new LocationMock().path);
         spyOn(location, 'replace');
         location.path('/games/' + routeParams.gid);
         scope.redirectToSetFullnameIfEmpty();
         expect(routeParams.gid).toBe(scope.fp.gid);
-        expect(location.path.calls.length).toBe(3);
-        expect(location.replace.calls.length).toBe(1);
+        expect(location.path.calls.count()).toBe(3);
+        expect(location.replace.calls.count()).toBe(1);
         expect(location.path).toHaveBeenCalledWith('/games/' + routeParams.gid);
         expect(location.path).toHaveBeenCalledWith();
         expect(location.path).toHaveBeenCalledWith('/games/join/' + routeParams.gid);
@@ -297,7 +298,7 @@ describe('Controller: PlayCtrl', function() {
     it('should allow users to set their full names', function() {
         // //this should go to the login controller
         // spyOn(cookieStore, 'put');
-        // spyOn(location, 'path').andCallFake(new LocationMock().path);
+        // spyOn(location, 'path').and.callFake(new LocationMock().path);
         // spyOn(location, 'replace');
         // routeParams.gid = scope.fp.gid;
         // scope.setFullname();

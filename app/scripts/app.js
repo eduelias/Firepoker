@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('firePokerApp', ['firebase', 'ngCookies'])
+angular.module('firePokerApp', ['firebase', 'ngCookies', 'ngRoute'])
     .config(function($routeProvider) {
         $routeProvider
             .when('/', {
