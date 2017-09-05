@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * MainCtrl
+ * PlayCtrl
  *
  * FirePoker.io is a monolithic well tested app, so for now all it's
  * logic is on this single controller, in the future we could be splitting the logic

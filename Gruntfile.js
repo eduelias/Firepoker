@@ -1,10 +1,10 @@
 'use strict';
 var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
-var mountFolder = function(connect, dir) {
+var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
             },
             livereload: {
                 options: {
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             lrSnippet,
                             mountFolder(connect, '.tmp'),
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
             },
             test: {
                 options: {
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, 'test')
@@ -102,6 +102,11 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js',
                 singleRun: true
+            },
+            xunit: {
+                configFile: 'karma.conf.js',
+                singleRun: false,
+                //captureTimeout: 9999999999
             }
         },
         coffee: {

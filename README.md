@@ -1,4 +1,4 @@
-Firepoker [![Build Status](https://travis-ci.org/eduelias/Firepoker.png?branch=master)](https://travis-ci.org/eduelias/Firepoker) [![Code Climate](https://codeclimate.com/github/eduelias/Firepoker/badges/gpa.svg)](https://codeclimate.com/github/eduelias/Firepoker)
+Firepoker [![Build Status](https://travis-ci.org/eduelias/Firepoker.png?branch=master)](https://travis-ci.org/eduelias/Firepoker) [![Code Climate](https://codeclimate.com/github/eduelias/Firepoker/badges/gpa.svg)](https://codeclimate.com/github/eduelias/Firepoker) [![devDependency Status](https://david-dm.org/eduelias/Firepoker.svg?style=flat-square)](https://david-dm.org/eduelias/Firepoker#info=devDependencies)
 =========
 
 Agile Planning Poker® powered by Firebase and AngularJS
