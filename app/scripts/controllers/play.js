@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * MainCtrl
+ * PlayCtrl
  *
  * FirePoker.io is a monolithic well tested app, so for now all it's
  * logic is on this single controller, in the future we could be splitting the logic
@@ -233,10 +233,17 @@ angular.module('firePokerApp')
         $scope.registerPresence();
 
         // Update view on game changes
-        $scope.$watch('game', function(game) {
-            if (!game) {
+        $scope.$watch('game', function(newValue, oldValue) {
+            if (newValue === oldValue) {
                 return;
             }
+            if (!newValue.created) {
+                var guid = $routeParams.gid || $scope.fp.gid;
+                $location.path('/games/new/' + guid);
+                $location.replace();
+                return;
+            }
+
             $scope.setShowCardDeck();
             $scope.setShowSelectEstimate();
             $scope.setShowCheckmarks();
@@ -246,5 +253,4 @@ angular.module('firePokerApp')
             $scope.setUnestimatedStoryCount();
             $scope.syncFp();
         });
-
     });

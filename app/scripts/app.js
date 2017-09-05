@@ -5,7 +5,7 @@ angular.module('firePokerApp', ['firebase', 'ngCookies'])
         $routeProvider
             .when('/', {
                 templateUrl: 'views/games/index.html',
-                controller: 'MainCtrl'
+                controller: 'CommonCtrl'
             })
             .when('/games/new/:gid', {
                 templateUrl: 'views/games/new.html',

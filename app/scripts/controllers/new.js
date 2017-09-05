@@ -30,6 +30,7 @@ angular.module('firePokerApp')
         // Set new game
         $scope.setNewGame = function(game) {
             utils.firebase.child('/games/' + $routeParams.gid).set(game);
+            $scope.game = game;
         };
 
         // Create game

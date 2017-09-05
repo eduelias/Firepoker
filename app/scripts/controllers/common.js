@@ -72,6 +72,7 @@ angular.module('firePokerApp')
         };
 
         // Set Defaults
+        $scope.game = false;
         $scope.newGame = { deck: $scope.decks[1] };
         $scope.showCardDeck = true;
         $scope.showSelectEstimate = false;

@@ -1,4 +1,4 @@
-<div class="row" ng-show="game">
+<div class="row" ng-show="game && game.created">
     <div class="col-md-8">
         <!-- Story -->
         <div class="bordered" ng-show="game.estimate">
@@ -21,14 +21,13 @@
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
                         <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
-                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center"
-                                href="#"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
+                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center" href="#"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
                             <div ng-hide="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
                             <p class="text-center truncate">{{result.user.fullname}}</p>
                         </li>
                     </ul>
                     <div ng-show="totalOfOnlineParticipants() > 1" id="player-counter">
-                        <span ng-bind="game.estimate.results.length"></span> of <span ng-bind="totalOfOnlineParticipants()"></span>                        players
+                        <span ng-bind="game.estimate.results.length"></span> of <span ng-bind="totalOfOnlineParticipants()"></span> players
                     </div>
                     <div ng-show="totalOfOnlineParticipants() <= 1" id="player-counter">
                         You seem to have confused this for planning solitaire.
@@ -95,7 +94,7 @@
                             <label for="free-form-story-notes">Notes</label>
                             <textarea ng-model="newStory.notes" class="form-control" id="free-form-story-notes" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success" ng-disabled="formFreeForm.$invalid">Add story</button>                        or <a href="#">Cancel</a>
+                        <button type="submit" class="btn btn-success" ng-disabled="formFreeForm.$invalid">Add story</button> or <a href="#">Cancel</a>
                     </form>
                 </div>
                 <div ng-show="isOwner" class="tab-pane" id="structured">
@@ -116,7 +115,7 @@
                             <label for="structured-story-notes">Notes</label>
                             <textarea ng-model="newStory.notes" class="form-control" id="structured-story-notes" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success" ng-disabled="formStructured.$invalid">Add story</button>                        or <a href="#">Cancel</a>
+                        <button type="submit" class="btn btn-success" ng-disabled="formStructured.$invalid">Add story</button> or <a href="#">Cancel</a>
                     </form>
                 </div>
                 <div class="tab-pane active" id="story-list">
@@ -138,8 +137,7 @@
             </div>
         </div>
         <div class="vspace">
-            <p>Project built with <a href="http://www.firebase.com" target="_blank">Firebase</a> and <a href="http://www.angularjs.org/"
-                    target="_blank">AngularJS</a> at <a href="http://www.wizehive.com/" target="_blank">WizeHive</a> and <a href="mailto:du7@msn.com">du7@msn.com</a>.</p>
+            <p>Project built with <a href="http://www.firebase.com" target="_blank">Firebase</a> and <a href="http://www.angularjs.org/" target="_blank">AngularJS</a> at <a href="http://www.wizehive.com/" target="_blank">WizeHive</a> and <a href="mailto:du7@msn.com">du7@msn.com</a>.</p>
         </div>
     </div>
     <div class="col-md-4">
