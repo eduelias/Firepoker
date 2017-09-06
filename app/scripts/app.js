@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('firePokerApp', ['ngCookies', 'ngRoute'])
+angular.module('firePokerApp', ['firebase', 'ngCookies', 'ngRoute'])
     .config(function($routeProvider, $locationProvider) {
         $locationProvider.hashPrefix('');
         $routeProvider

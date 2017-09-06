@@ -15,10 +15,11 @@
  * @author Eduardo Elias Saleh <du7@msn.com>
  */
 angular.module('firePokerApp')
-    .controller('NewCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
+    .controller('NewCtrl', function($controller, $firebaseObject, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
         $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
+            $firebaseObject: $firebaseObject,
             $scope: $scope,
             $cookieStore: $cookieStore,
             $location: $location,

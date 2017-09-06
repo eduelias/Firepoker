@@ -12,10 +12,11 @@
  * @author Everton Yoshitani <everton@wizehive.com>
  */
 angular.module('firePokerApp')
-    .controller('PlayCtrl', function($controller, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
+    .controller('PlayCtrl', function($controller, $rootScope, $firebaseObject, $scope, $cookieStore, $location, $routeParams, utils) {
         $controller('CommonCtrl', {
             $controller: $controller,
             $rootScope: $rootScope,
+            $firebaseObject: $firebaseObject,
             $scope: $scope,
             $cookieStore: $cookieStore,
             $location: $location,
@@ -149,6 +150,7 @@ angular.module('firePokerApp')
                         var index = $scope.game.estimate.results.indexOf(vote);
                         $scope.game.estimate.results.splice(index, 1);
                         $scope.game.participants[voter.id].hasVoted = false;
+                        $scope.$apply();
                         return;
                     }
                 });

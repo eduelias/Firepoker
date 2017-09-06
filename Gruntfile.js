@@ -23,12 +23,22 @@ module.exports = function(grunt) {
     grunt.initConfig({
         yeoman: yeomanConfig,
         wiredep: {
-            directory: 'app/components',
             target: {
-                src: 'index.html' // point to your HTML file.
+                src: 'app/index.html' // point to your HTML file.
             },
             options: {
-                cwd: '.'
+                cwd: '.',
+                directory: 'app/components',
+                overrides: {
+                    'bootstrap': {
+                        'main': [
+                            'less/bootstrap.less',
+                            'dist/js/bootstrap.js',
+                            'dist/css/bootstrap.css',
+                            'dist/css/bootstrap-theme.css'
+                        ]
+                    }
+                }
             }
         },
         watch: {
@@ -51,6 +61,9 @@ module.exports = function(grunt) {
                     '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ],
+                options: {
+                    livereload: true
+                },
                 tasks: ['livereload']
             }
         },
@@ -75,8 +88,9 @@ module.exports = function(grunt) {
                 options: {
                     middleware: function(connect) {
                         return [
-                            mountFolder(connect, '.tmp'),
-                            mountFolder(connect, 'test')
+                            connect.static('.tmp'),
+                            connect().use('app/components', connect.static('./app/components')),
+                            connect.static(yeomanConfig.app)
                         ];
                     }
                 }

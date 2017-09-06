@@ -20,7 +20,7 @@
 angular.module('firePokerApp')
     .controller('CommonCtrl', function(
         $controller,
-        $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
+        $rootScope, $firebaseObject, $scope, $cookieStore, $location, $routeParams, utils) {
         // Load cookies
         $scope.fp = $cookieStore.get('fp');
         if (!$scope.fp) {
@@ -30,7 +30,7 @@ angular.module('firePokerApp')
         // UID
         if (!$scope.fp.user || !$scope.fp.user.id) {
             var uid = utils.guid();
-            $scope.fp.user = { id: uid, active: true };
+            $scope.fp.user = { id: uid, active: true, hasVoted: false };
             $cookieStore.put('fp', $scope.fp);
         }
 
@@ -134,7 +134,7 @@ angular.module('firePokerApp')
 
         // syncs the db with storage
         $scope.syncFp = function() {
-            $scope.fp.user = angular.extend($scope.fp.user, $scope.game.participants[$scope.fp.user.id]);
+            $scope.fp.user = angular.extend($scope.fp.user, $scope.game.$child('participant/' + $scope.fp.user.id));
             $cookieStore.put('fp', $scope.fp);
         };
 
@@ -153,13 +153,9 @@ angular.module('firePokerApp')
         $scope.loadGame = function(callback) {
             callback = callback || function() {}
             if ($routeParams.gid) {
-                var connectedRef = utils.firebase.database().ref('/games/' + $routeParams.gid);
-                connectedRef.on('value', function(snap) {
-                    if (snap.val() === true) {
-                        $scope.game = snap.val();
-                        callback();
-                    }
-                });
+                var ref = utils.firebase.database().ref('/games/' + $routeParams.gid);
+                var syncobj = $firebaseObject(ref);
+                syncobj.$bindTo($scope, 'games');
             }
         };
 
@@ -167,7 +163,8 @@ angular.module('firePokerApp')
         $scope.loadUser = function() {
             var success = false;
             if ($scope.game && $scope.game.participants) {
-                angular.forEach($scope.game.participants, function(user) {
+                var users = $scope.game.$childs('participant');
+                angular.forEach(users, function(user) {
                     if (user.email === $scope.fp.user.email) {
                         $scope.fp.user = user;
                         success = true;
@@ -215,7 +212,8 @@ angular.module('firePokerApp')
         // Cancel round
         $scope.cancelRound = function() {
             if ($scope.game.estimate) {
-                var idx = $scope.game.estimate.id;
+                var idx = $scope.game.$child('estimate').id;
+
                 $scope.game.stories[idx].startedAt = false;
                 $scope.game.stories[idx].endedAt = false;
                 $scope.game.stories[idx].status = 'queue';
@@ -229,12 +227,13 @@ angular.module('firePokerApp')
         // Set story
         $scope.setStory = function(index) {
             $scope.cancelRound();
-            $scope.game.estimate = $scope.game.stories[index];
+            $scope.game.estimate = $scope.game.$child('stories/' + index);
             $scope.game.estimate.status = 'active';
             $scope.game.estimate.id = index;
             $scope.game.estimate.startedAt = new Date().getTime();
             $scope.game.estimate.endedAt = false;
             $scope.showCardDeck = true;
+            $scope.game.estimate.$save();
         };
 
         // Delete story

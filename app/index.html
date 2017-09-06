@@ -33,7 +33,11 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="components/angular-bootstrap/ui-bootstrap-csp.css">
+    <!-- <link rel="stylesheet" href="components/angular-bootstrap/ui-bootstrap-csp.css"> -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap-theme.css" />
+    <!-- endbower -->
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
@@ -49,17 +53,24 @@
 
     <!-- Add your site or application content here -->
     <div class="container" ng-view></div>
-    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+
     <!-- bower:js -->
     <script src="components/angular/angular.js"></script>
-    <script src="components/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="components/angular-route/angular-route.js"></script>
+    <!-- <script src="components/json3/lib/json3.js"></script> -->
+    <script src="components/es5-shim/es5-shim.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-cookies/angular-cookies.js"></script>
+    <script src="components/angular-route/angular-route.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.js"></script>
-    <!-- <script src="components/firebase/firebase.js"></script>
-    <script src="components/angularfire/dist/angularFire.js"></script> -->
+    <script src="components/jquery/dist/jquery.js"></script>
+    <script src="components/bootstrap/dist/js/bootstrap.js"></script>
     <!-- endbower -->
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
