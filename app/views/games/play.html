@@ -21,7 +21,7 @@
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
                         <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
-                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center" href="#"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
+                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center" data-toglle="tab" data-target="#"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
                             <div ng-hide="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
                             <p class="text-center truncate">{{result.user.fullname}}</p>
                         </li>
@@ -43,7 +43,7 @@
                 </ul>
             </div>
             <!-- Select an estimate -->
-            <div ng-show="showSelectEstimate" class="well">
+            <div ng-show="isOwner" class="well">
                 <form class="form-inline" role="form">
                     <div class="form-group col-md-2">
                         <label class="sr-only" for="estimate-points">Estimate</label>
@@ -67,15 +67,15 @@
         <!-- Create story -->
         <div>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#story-list" data-toggle="tab">Story list</a></li>
-                <li><a href="#estimated" data-toggle="tab">Voted</a></li>
-                <li ng-show="isOwner"><a href="#free-form" data-toggle="tab">Free-form</a></li>
-                <li ng-show="isOwner"><a href="#structured" data-toggle="tab">Structured</a></li>
+                <li class="active"><a data-toglle="tab" data-target="#story-list" data-toggle="tab">Story list</a></li>
+                <li><a data-toglle="tab" data-target="#estimated" data-toggle="tab">Voted</a></li>
+                <li ng-show="isOwner"><a data-toglle="tab" data-target="#free-form" data-toggle="tab">Free-form</a></li>
+                <li ng-show="isOwner"><a data-toglle="tab" data-target="#structured" data-toggle="tab">Structured</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane" id="estimated">
+                <div class="tab-pane" id="estimated" ng-show="game.stories">
                     <!-- Estimated stories -->
-                    <div ng-repeat="story in game.stories | orderBy:'endedAt'" class="stories">
+                    <div ng-repeat="story in game.stories | orderBy:'endedAt' track by $index" class="stories">
                         <div ng-show="story.status == 'closed'" class="bordered">
                             <p class="text-right">Estimated: <span class="label label-danger">{{story.points || 0}}</span></p>
                             <h5>{{story.title}}</h5>
@@ -94,7 +94,7 @@
                             <label for="free-form-story-notes">Notes</label>
                             <textarea ng-model="newStory.notes" class="form-control" id="free-form-story-notes" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success" ng-disabled="formFreeForm.$invalid">Add story</button> or <a href="#">Cancel</a>
+                        <button type="submit" class="btn btn-success" ng-disabled="formFreeForm.$invalid">Add story</button> or <a data-toglle="tab" data-target="#">Cancel</a>
                     </form>
                 </div>
                 <div ng-show="isOwner" class="tab-pane" id="structured">
@@ -115,13 +115,16 @@
                             <label for="structured-story-notes">Notes</label>
                             <textarea ng-model="newStory.notes" class="form-control" id="structured-story-notes" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success" ng-disabled="formStructured.$invalid">Add story</button> or <a href="#">Cancel</a>
+                        <button type="submit" class="btn btn-success" ng-disabled="formStructured.$invalid">Add story</button> or <a data-toglle="tab" data-target="#">Cancel</a>
                     </form>
                 </div>
                 <div class="tab-pane active" id="story-list">
+                    <div ng-hide="game.stories">
+                        <span ng-hide="unestimatedStoriesCount">Loading ...</span>
+                    </div>
                     <div ng-show="game.stories">
                         <ul ng-show="unestimatedStoriesCount" class="list-unstyled">
-                            <li ng-repeat="story in game.stories" ng-show="story.status == 'queue'">
+                            <li ng-repeat="story in game.stories track by $index" ng-show="story.status == 'queue'">
                                 <div ng-show="isOwner" class="pull-right">
                                     <a href="" ng-click="setStory($index)"><span class="glyphicon glyphicon-search" alt="Vote this"></span></a>
                                     <a href="" ng-click="deleteStory($index)"><span class="glyphicon glyphicon-trash" alt="Remove this"></span></a>
@@ -149,10 +152,10 @@
                                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li><a class='clickable' ng-click="toggleObservator()">Toggle observer mode</a></li>
-                    <!-- <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li> -->
+                    <!-- <li><a data-toglle="tab" data-target="#">Another action</a></li>
+                    <li><a data-toglle="tab" data-target="#">Something else here</a></li> -->
                     <li class="divider"></li>
-                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                    <li><a data-toglle="tab" data-target="#" ng-click="logout()">Logout</a></li>
                 </ul>
             </div>
 
