@@ -15,21 +15,61 @@
  * @author Eduardo Elias Saleh <du7@msn.com>
  */
 angular.module('firePokerApp')
-    .controller('LoginCtrl', function($controller, $firebaseObject, $rootScope, $scope, $cookieStore, $location, $routeParams, utils) {
-        $controller('CommonCtrl', {
-            $controller: $controller,
-            $rootScope: $rootScope,
-            $firebaseObject: $firebaseObject,
-            $scope: $scope,
-            $cookieStore: $cookieStore,
-            $location: $location,
-            $routeParams: $routeParams,
-            utils: utils
-        });
+    .controller('LoginCtrl', function($scope, $routeParams, $location, $cookies, utils) {
 
-        // loads the game if one were provided
-        $scope.loadGame();
+        // deals with the fp cookie
+        utils.dealsWithFp($scope);
+
+        // load user from storage
+        $scope.loadUser = function() {
+            var success = false;
+            if ($scope.game && $scope.game.participants) {
+                angular.forEach($scope.game.participants, function(user) {
+                    if (user.email === $scope.fp.user.email) {
+                        $scope.fp.user = user;
+                        success = true;
+                    }
+                });
+            }
+            if (!success) {
+                $cookies.removeObject('fp');
+            }
+            return success;
+        };
+
+        // try to load user by its email
+        $scope.setEmail = function() {
+            if (utils.loadUser()) {
+                $scope.setFullname();
+            } else {
+                $scope.loginerror = "Game or user not found";
+            }
+        };
+
+        // Set full name
+        $scope.setFullname = function() {
+            $cookies.putObject('fp', $scope.fp);
+            $scope.game.participants[$scope.fp.user.id] = $scope.fp.user;
+            $location.path('/games/' + $routeParams.gid);
+            $location.replace();
+        };
+
+        // Redirect to game if fullname already set
+        $scope.redirectToGameIfFullnameAlreadySet = function() {
+            if (
+                $routeParams.gid &&
+                $location.path() === '/games/join/' + $routeParams.gid &&
+                $scope.fp &&
+                $scope.fp.user &&
+                $scope.fp.user.fullname
+            ) {
+                $location.path('/games/' + $routeParams.gid).replace();
+            }
+        };
 
         // Redirect to game if fullname already set
         $scope.redirectToGameIfFullnameAlreadySet();
+
+        // loads the game if one were provided
+        utils.bindGame($scope, $routeParams.gid);
     });

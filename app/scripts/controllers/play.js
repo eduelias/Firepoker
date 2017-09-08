@@ -13,11 +13,9 @@
  */
 angular.module('firePokerApp')
     .controller('PlayCtrl', function($controller, $rootScope, $firebaseObject, $scope, $cookieStore, $location, $routeParams, utils) {
-        // Load cookies
-        $scope.fp = $cookieStore.get('fp');
-        if (!$scope.fp) {
-            $scope.fp = {};
-        }
+
+        utils.dealsWithFp($scope);
+        utils.dealsWithRouting($scope);
 
         Object.defineProperty($scope, "newEstimate", {
             get: function() {
@@ -86,20 +84,6 @@ angular.module('firePokerApp')
             set: function() {}
         });
 
-        // UID
-        if (!$scope.fp.user || !$scope.fp.user.id) {
-            var uid = utils.guid();
-            $scope.fp.user = { id: uid, active: true, hasVoted: false, online: true };
-            $cookieStore.put('fp', $scope.fp);
-        }
-
-        // GID
-        if (!$scope.fp.gid) {
-            var gid = utils.guid();
-            $scope.fp.gid = gid;
-            $cookieStore.put('fp', $scope.fp);
-        }
-
         // Set Defaults
         $scope.game = {};
         $scope.showSelectEstimate = false;
@@ -107,30 +91,15 @@ angular.module('firePokerApp')
 
         // loads the game, only
         $scope.loadGame = function(callback) {
-            callback = callback || function() {}
-            if ($routeParams.gid) {
-                var ref = utils.firebase.database().ref('games/' + $routeParams.gid);
-                var syncGames = $firebaseObject(ref);
-                syncGames.$bindTo($scope, 'game');
-                ref.once('value', function(snap) {
-                    callback($scope.game);
-                    // Register my presence in the game
-                    $scope.registerPresence();
-                });
-            }
-        };
-
-        $scope.doIfGameExists = function(gameid, callback) {
-            utils.firebase.database().ref('games/' + gameid).once('value', function(snapshot) {
-                if (snapshot.val() !== null) {
-                    callback(snapshot);
-                }
+            utils.bindGame($scope, $routeParams.gid, function() {
+                callback();
+                $scope.registerPresence();
             });
         };
 
         // Load game and register presence
         $scope.registerPresence = function() {
-            $scope.doIfGameExists($routeParams.gid, function(game) {
+            utils.doIfGameExists($routeParams.gid, function(game) {
                 var onlineRef = utils.firebase.database().ref('games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
                 var connectedRef = utils.firebase.database().ref('/.info/connected');
                 connectedRef.on('value', function(snap) {
@@ -356,10 +325,11 @@ angular.module('firePokerApp')
         $scope.unvote = function(voter) {
             if ($scope.game.participants[voter.id].hasVoted && $scope.game && $scope.game.estimate && $scope.game.estimate.results) {
                 angular.forEach($scope.game.estimate.results, function(vote) {
-                    if (vote.user.id == $scope.game.participants[voter.id].id) {
+                    if (vote.user.id === $scope.game.participants[voter.id].id) {
                         var index = $scope.game.estimate.results.indexOf(vote);
                         $scope.game.estimate.results.splice(index, 1);
                         $scope.game.participants[voter.id].hasVoted = false;
+                        $scope.game.participants[voter.id].estimated = false;
                         return;
                     }
                 });
@@ -374,10 +344,13 @@ angular.module('firePokerApp')
             if ($scope.game.participants[$scope.fp.user.id].hasVoted) {
                 $scope.unvote($scope.fp.user);
             }
-            $scope.game.estimate.results.push({ points: points, user: $scope.fp.user });
             $scope.fp.user.estimate = points;
+            $scope.game.participants[$scope.fp.user.id].estimate = points;
+
             $scope.fp.user.hasVoted = true;
             $scope.game.participants[$scope.fp.user.id].hasVoted = true;
+
+            $scope.game.estimate.results.push({ points: points, user: $scope.fp.user });
         };
 
         // // Show checkmarks when participant has voted

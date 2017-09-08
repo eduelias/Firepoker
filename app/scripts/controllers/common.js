@@ -80,34 +80,6 @@ angular.module('firePokerApp')
             }
         };
 
-        // try to load user by its email
-        $scope.setEmail = function() {
-            if ($scope.loadUser()) {
-                $scope.setFullname();
-            } else {
-                $scope.loginerror = "Game or user not found";
-            }
-        };
-
-        // Set full name
-        $scope.setFullname = function() {
-            $cookieStore.put('fp', $scope.fp);
-            $location.path('/games/' + $routeParams.gid);
-            $location.replace();
-        };
-
-        // Redirect to set fullname if empty
-        $scope.redirectToSetFullnameIfEmpty = function() {
-            if (
-                $routeParams.gid &&
-                $location.path() === '/games/' + $routeParams.gid &&
-                !$scope.fp.user.fullname
-            ) {
-                $location.path('/games/join/' + $routeParams.gid);
-                $location.replace();
-            }
-        };
-
         // Logout
         $scope.logout = function() {
             $cookieStore.remove('fp');
@@ -121,17 +93,6 @@ angular.module('firePokerApp')
             $cookieStore.put('fp', $scope.fp);
         };
 
-        // Redirect to game if fullname already set
-        $scope.redirectToGameIfFullnameAlreadySet = function() {
-            if (
-                $routeParams.gid &&
-                $location.path() === '/games/join/' + $routeParams.gid &&
-                $scope.fp.user.fullname
-            ) {
-                $location.path('/games/' + $routeParams.gid).replace();
-            }
-        };
-
         // loads the game, only
         $scope.loadGame = function(callback) {
             callback = callback || function() {}
@@ -140,24 +101,6 @@ angular.module('firePokerApp')
                 var syncobj = $firebaseObject(ref);
                 syncobj.$bindTo($scope, 'games');
             }
-        };
-
-        // load user from storage
-        $scope.loadUser = function() {
-            var success = false;
-            if ($scope.game && $scope.game.participants) {
-                var users = $scope.game.$childs('participant');
-                angular.forEach(users, function(user) {
-                    if (user.email === $scope.fp.user.email) {
-                        $scope.fp.user = user;
-                        success = true;
-                    }
-                });
-            }
-            if (!success) {
-                $cookieStore.remove('fp');
-            }
-            return success;
         };
 
         // count the participants by a comparer function
