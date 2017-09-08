@@ -89,7 +89,7 @@ angular.module('firePokerApp')
         // UID
         if (!$scope.fp.user || !$scope.fp.user.id) {
             var uid = utils.guid();
-            $scope.fp.user = { id: uid, active: true, hasVoted: false };
+            $scope.fp.user = { id: uid, active: true, hasVoted: false, online: true };
             $cookieStore.put('fp', $scope.fp);
         }
 
@@ -114,16 +114,24 @@ angular.module('firePokerApp')
                 syncGames.$bindTo($scope, 'game');
                 ref.once('value', function(snap) {
                     callback($scope.game);
+                    // Register my presence in the game
+                    $scope.registerPresence();
                 });
             }
         };
 
+        $scope.doIfGameExists = function(gameid, callback) {
+            utils.firebase.database().ref('games/' + gameid).once('value', function(snapshot) {
+                if (snapshot.val() !== null) {
+                    callback(snapshot);
+                }
+            });
+        };
+
         // Load game and register presence
         $scope.registerPresence = function() {
-            if ($scope.game.created) {
-                $scope.game.participants[$scope.fp.user.id] = $scope.fp.user;
-                //utils.firebase.database().ref('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id).set($scope.fp.user);
-                var onlineRef = utils.firebase.database().ref('/games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
+            $scope.doIfGameExists($routeParams.gid, function(game) {
+                var onlineRef = utils.firebase.database().ref('games/' + $routeParams.gid + '/participants/' + $scope.fp.user.id + '/online');
                 var connectedRef = utils.firebase.database().ref('/.info/connected');
                 connectedRef.on('value', function(snap) {
                     if (snap.val() === true) {
@@ -133,7 +141,7 @@ angular.module('firePokerApp')
                         onlineRef.set(true);
                     }
                 });
-            }
+            });
         };
 
         // Load the game data
@@ -155,9 +163,6 @@ angular.module('firePokerApp')
                 // $scope.syncFp();
             });
         });
-
-        // Register my presence in the game
-        $scope.registerPresence();
 
         // Set unestimated stories count
         $scope.setUnestimatedStoryCount = function() {

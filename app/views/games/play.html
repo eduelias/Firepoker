@@ -21,7 +21,10 @@
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
                         <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
-                            <div ng-show="showCards || result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card text-center"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
+                            <div ng-show="showCards || result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card text-center">
+                                <span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>
+                                <span>{{result.points}}</span>
+                            </div>
                             <div ng-hide="result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
                             <p class="text-center truncate">{{result.user.fullname}}</p>
                         </li>
@@ -38,7 +41,7 @@
             <div ng-show="showCardDeck && game.participants[fp.user.id].active" class="well well-sm">
                 <ul class="list-inline">
                     <li ng-repeat="card in game.deck.cards">
-                        <div class="card text-center clickable" ng-click="estimate(card, this)">{{card}}</div>
+                        <div class="card text-center clickable" ng-class="{'selected': card == fp.user.estimate}" ng-click="estimate(card, this)">{{card}}</div>
                     </li>
                 </ul>
             </div>
@@ -47,7 +50,7 @@
                 <form class="form-inline" role="form">
                     <div class="form-group col-md-2">
                         <label class="sr-only" for="estimate-points">Estimate</label>
-                        <input ng-show="showCards" ng-model="newEstimate.points" type="number" class="form-control input-small" id="estimate-points">
+                        <input ng-show="showCards" ng-model="newEstimate.points" style="width: 100px" type="number" class="form-control input-small" id="estimate-points">
                         <input ng-hide="showCards" value="?" type="text" disabled class="form-control input-small" id="estimate-points">
                     </div>
                     <button type="submit" class="btn btn-success" ng-click="acceptRound()">Accept round</button>

@@ -310,7 +310,7 @@ span:focus:hover {
 }
 
 .selected {
-    background-color: black;
+    background-color: #55acee;
 }
 
 .clickable {
