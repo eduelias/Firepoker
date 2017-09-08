@@ -34,7 +34,7 @@ angular.module('firePokerApp')
                 }
                 return this.app;
             },
-            decks : [{
+            decks: [{
                     id: 0,
                     cards: [0, 1, 2, 4, 8, 16, 32, 64, 128, '?', '☕'],
                     description: '0, 1, 2, 4, 8, 16, 32, 64, 128 and ?,☕'
@@ -52,11 +52,25 @@ angular.module('firePokerApp')
                 }
             ],
             get newGame() {
-                return { deck: this.decks[1], participants:[] };
-            } ,
-            fibonacciAvg : function(num) {
+                return { deck: this.decks[1], participants: [] };
+            },
+            fibonacciAvg: function(results) {
+                return this.fibonacciNearest(this.avg(results));
+            },
+            fibonacciNearest: function(num) {
                 var f = (n, x = 0, y = 1) => y < n ? f(n, y, x + y) : y - n > n - x ? x : y;
                 return f(num);
+            },
+            avg: function(results) {
+                var avg = 0;
+                var sum = 0;
+                angular.forEach(results, function(result) {
+                    if (result.points && angular.isNumber(result.points)) {
+                        sum += result.points;
+                    }
+                });
+                avg = Math.ceil(sum / results.length);
+                return avg;
             }
         }
     });

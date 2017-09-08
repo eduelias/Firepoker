@@ -40,8 +40,11 @@ angular.module('firePokerApp')
 
         // Set new game
         $scope.setNewGame = function(game) {
-            utils.firebase.database().ref('games/' + $routeParams.gid).set(game);
-            $scope.gameRef = utils.firebase.database().ref('games/' + $routeParams.gid);
+            var ref = utils.firebase.database().ref('games/' + $routeParams.gid);
+            ref.set(game, function() {
+                var sObj = $firebaseObject(ref);
+                sObj.$bindTo($scope, "game");
+            });
             $cookies.putObject('fp', $scope.fp);
         };
 
@@ -50,12 +53,20 @@ angular.module('firePokerApp')
             var stories = [],
                 newGame = angular.copy($scope.newGame);
 
+            newGame.estimate = false;
             if (newGame.stories) {
+                var i = 0;
                 angular.forEach(newGame.stories.split('\n'), function(title) {
                     var story = {
+                        id: i++,
                         title: title,
-                        status: 'queue'
+                        status: 'queue',
+                        results: []
                     };
+                    if (!newGame.estimate) {
+                        story.status = 'active';
+                        newGame.estimate = story;
+                    }
                     stories.push(story);
                 });
             }
@@ -64,7 +75,6 @@ angular.module('firePokerApp')
             newGame.created = new Date().getTime();
             newGame.owner = $scope.fp.user;
             newGame.participants[$scope.fp.user.id] = $scope.fp.user;
-            newGame.estimate = false;
             $scope.isOwner = true;
             $scope.loginerror = false;
             $scope.setNewGame(newGame);

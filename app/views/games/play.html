@@ -21,8 +21,8 @@
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
                         <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
-                            <div ng-show="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card text-center" data-toglle="tab" data-target="#"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
-                            <div ng-hide="showCards || result.user.id == fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
+                            <div ng-show="showCards || result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card text-center"><span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>{{result.points}}</div>
+                            <div ng-hide="result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card card-facedown">&nbsp;</div>
                             <p class="text-center truncate">{{result.user.fullname}}</p>
                         </li>
                     </ul>
@@ -37,7 +37,7 @@
             <!-- Card deck -->
             <div ng-show="showCardDeck && game.participants[fp.user.id].active" class="well well-sm">
                 <ul class="list-inline">
-                    <li ng-repeat="card in decks[game.deck.id].cards">
+                    <li ng-repeat="card in game.deck.cards">
                         <div class="card text-center clickable" ng-click="estimate(card, this)">{{card}}</div>
                     </li>
                 </ul>

@@ -63,8 +63,7 @@ module.exports = function(grunt) {
                 ],
                 options: {
                     livereload: true
-                },
-                tasks: ['livereload']
+                }
             }
         },
         connect: {
@@ -298,13 +297,13 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.renameTask('regarde', 'watch');
+    //grunt.renameTask('regarde', 'watch');
 
     grunt.registerTask('server', [
         'clean:server',
         'coffee:dist',
         //'compass:server',
-        'livereload-start',
+        //'livereload-start',
         'connect:livereload',
         'open',
         'watch'
