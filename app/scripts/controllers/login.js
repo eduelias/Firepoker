@@ -39,7 +39,7 @@ angular.module('firePokerApp')
 
         // try to load user by its email
         $scope.setEmail = function() {
-            if (utils.loadUser()) {
+            if ($scope.loadUser()) {
                 $scope.setFullname();
             } else {
                 $scope.loginerror = "Game or user not found";

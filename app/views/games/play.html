@@ -20,7 +20,7 @@
                 </div>
                 <div id="estimate-results" ng-show="game.estimate.results">
                     <ul class="list-inline">
-                        <li ng-repeat="result in game.estimate.results | orderBy:'points'" class="list-item">
+                        <li ng-repeat="result in game.estimate.results | orderBy:(isOwner?'points':'when')" class="list-item">
                             <div ng-show="showCards || result.user.id === fp.user.id || !game.participants[fp.user.id].active" class="card text-center">
                                 <span class="label label-danger unvote clickable" ng-show="result.user.id == fp.user.id" ng-click="unvote(result.user)">x</span>
                                 <span>{{result.points}}</span>

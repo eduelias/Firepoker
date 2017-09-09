@@ -350,7 +350,7 @@ angular.module('firePokerApp')
             $scope.fp.user.hasVoted = true;
             $scope.game.participants[$scope.fp.user.id].hasVoted = true;
 
-            $scope.game.estimate.results.push({ points: points, user: $scope.fp.user });
+            $scope.game.estimate.results.push({ points: points, user: $scope.fp.user, when: new Date().getTime() });
         };
 
         // // Show checkmarks when participant has voted
