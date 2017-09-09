@@ -9,18 +9,25 @@
 angular.module('firePokerApp')
     .directive('contenteditable', function() {
         return {
-            require: 'ngModel',
-            restrict: 'A',
-            link: function postLink(scope, element, attrs, ngModel) {
+            restrict: "A",
+            require: "ngModel",
+            link: function(scope, element, attrs, ngModel) {
+
                 function read() {
-                    ngModel.$setViewValue(element.html());
+                    // view -> model
+                    var html = element.html();
+                    html = html.replace(/&nbsp;/g, "\u00a0");
+                    ngModel.$setViewValue(html);
                 }
+                // model -> view
                 ngModel.$render = function() {
-                    element.html(ngModel.$viewValue || '');
+                    element.html(ngModel.$viewValue || "");
                 };
-                element.bind('blur keyup change', function() {
+
+                element.bind("blur", function() {
                     scope.$apply(read);
                 });
+                element.bind("keydown keypress", function(event) {});
             }
         };
     });

@@ -6,6 +6,17 @@
 /*global spyOn*/
 /*global xit*/
 'use strict';
+
+var url = 'https://www.gstatic.com/firebasejs/3.6.6/firebase.js';
+var newScript = document.createElement('script');
+newScript.setAttribute('src', url);
+document.head.appendChild(newScript);
+
+var url = 'https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js';
+var newScript = document.createElement('script');
+newScript.setAttribute('src', url);
+document.head.appendChild(newScript);
+
 /**
  * PlayCtrl Unit Tests
  *
@@ -17,7 +28,6 @@
 describe('Controller: PlayCtrl', function() {
     // Load the controller's module
     beforeEach(module('firePokerApp'));
-    //beforeEach(module('firebase'));
     beforeEach(module('ngCookies'));
     beforeEach(module('ngRoute'));
 

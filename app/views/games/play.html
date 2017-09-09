@@ -5,9 +5,9 @@
             <p class="text-right">
                 <span class="label label-success over-right">CURRENT</span>
             </p>
-            <h3 ng-show="isOwner || fp.user.moderator"><span ng-model="game.estimate.title" contenteditable="true" ng-show="isOwner || fp.user.moderator">{{game.estimate.title}}</span></h3>
-            <h3 ng-hide="isOwner || fp.user.moderator"><span ng-model="game.estimate.title" contenteditable="false" ng-hide="isOwner || fp.user.moderator">{{game.estimate.title}}</span></h3>
-            <p ng-show="isOwner || fp.user.moderator"><span ng-model="game.estimate.notes" contenteditable="true" ng-show="isOwner || fp.user.moderator">{{game.estimate.notes}}</span></p>
+            <h3 ng-show="isOwner || game.participants[fp.user.id].moderator"><span ng-model="game.estimate.title" contenteditable="true"></span></h3>
+            <h3 ng-hide="isOwner || game.participants[fp.user.id].moderator"><span ng-model="game.estimate.title" contenteditable="false"></span></h3>
+            <p ng-show="isOwner || game.participants[fp.user.id].moderator"><span ng-model="game.estimate.notes" contenteditable="true">{{game.estimate.notes}}</span></p>
             <!-- <p ng-hide="isOwner || fp.user.moderator"><span ng-model="game.estimate.notes" contenteditable="false" ng-hide="isOwner || fp.user.moderator">{{game.estimate.notes}}</span></p> -->
         </div>
         <!-- Estimate story -->
@@ -38,10 +38,10 @@
                 </div>
             </div>
             <!-- Card deck -->
-            <div ng-show="showCardDeck && game.participants[fp.user.id].active" class="well well-sm">
+            <div ng-show="showCardDeck" class="well well-sm">
                 <ul class="list-inline">
                     <li ng-repeat="card in game.deck.cards">
-                        <div class="card text-center clickable" ng-class="{'selected': game.participants[fp.user.id].hasVoted && card == game.participants[fp.user.id].estimate}" ng-click="estimate(card, this)">{{card}}</div>
+                        <div class="card text-center" ng-class="{'clickable': game.participants[fp.user.id].active, 'selected': game.participants[fp.user.id].hasVoted && card == game.participants[fp.user.id].estimate, 'disabled': !game.participants[fp.user.id].active}" ng-click="game.participants[fp.user.id].active && estimate(card, this)">{{card}}</div>
                     </li>
                 </ul>
             </div>
@@ -70,10 +70,10 @@
         <!-- Create story -->
         <div>
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toglle="tab" data-target="#story-list" data-toggle="tab">Story list</a></li>
-                <li><a data-toglle="tab" data-target="#estimated" data-toggle="tab">Voted</a></li>
-                <li ng-show="isOwner"><a data-toglle="tab" data-target="#free-form" data-toggle="tab">Free-form</a></li>
-                <li ng-show="isOwner"><a data-toglle="tab" data-target="#structured" data-toggle="tab">Structured</a></li>
+                <li class="active clickable"><a data-toglle="tab" data-target="#story-list" data-toggle="tab">Story list</a></li>
+                <li class="clickable"><a data-toglle="tab" data-target="#estimated" data-toggle="tab">Voted</a></li>
+                <li class="clickable" ng-show="isOwner"><a data-toglle="tab" data-target="#free-form" data-toggle="tab">Free-form</a></li>
+                <li class="clickable" ng-show="isOwner"><a data-toglle="tab" data-target="#structured" data-toggle="tab">Structured</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane" id="estimated" ng-show="game.stories">
@@ -170,20 +170,18 @@
             <div class="vspace">
                 <h5>Participants ({{totalOfOnlineParticipants()}})</h5>
                 <ul class="list-unstyled">
-                    <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
-                        <div ng-show="participant.active">
-                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
-                        </div>
+                    <li ng-show="!game || !game.participants"> Loading ... </li>
+                    <li ng-repeat="participant in game.participants | filterObjectBy:'active':'true'" ng-show="participant.online == true">
+                        <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
                     </li>
                 </ul>
             </div>
             <div class="vspace">
                 <h5>Observers ({{totalOfObservers()}})</h5>
                 <ul class="list-unstyled">
-                    <li ng-repeat="participant in game.participants" ng-show="participant.online == true">
-                        <div ng-hide="participant.active">
-                            <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
-                        </div>
+                    <li ng-show="!game || !game.participants"> Loading ... </li>
+                    <li ng-repeat="participant in game.participants | filterObjectBy:'active':'false'" ng-show="participant.online == true">
+                        <users-control participant="game.participants[participant.id]" game="game" loggeduser="game.participants[fp.user.id]"></users-control>
                     </li>
                 </ul>
             </div>

@@ -18,10 +18,13 @@ module.exports = function(config) {
             'app/components/angular-route/angular-route.js',
             'app/components/angular-mocks/angular-mocks.js',
             'app/components/angular-cookies/angular-cookies.js',
+            'app/components/angular-toArrayFilter/toArrayFilter.js',
             'app/scripts/*.js',
             'app/scripts/**/*.js',
             // 'test/mock/**/*.js',
-            'test/spec/**/*.js'
+            'test/spec/**/*.js',
+            'https://www.gstatic.com/firebasejs/3.6.6/firebase.js',
+            'https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js'
         ],
 
         // debug with vs

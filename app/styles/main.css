@@ -41,6 +41,7 @@ body {
 }
 
 .card {
+    /* display: none; */
     width: 80px;
     height: 110px;
     color: #333;

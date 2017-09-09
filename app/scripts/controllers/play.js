@@ -123,13 +123,7 @@ angular.module('firePokerApp')
                     $location.replace();
                     return;
                 }
-                // $scope.setShowSelectEstimate();
-                // $scope.setShowCheckmarks();
-                // $scope.setNewEstimate();
-                // $scope.setDisablePlayAgainAndRevealButtons();
-                // $scope.setShowCards();
                 $scope.setUnestimatedStoryCount();
-                // $scope.syncFp();
             });
         });
 
@@ -238,76 +232,12 @@ angular.module('firePokerApp')
             $scope.game.participants[participant.id].moderator = !$scope.game.participants[participant.id].moderator;
         };
 
-        // $scope.toggleObservator = function() {
-        //     $scope.game.participants[$scope.fp.user.id].active = !$scope.game.participants[$scope.fp.user.id].active;
-        // };
-
-        // // Set card deck visibility
-        // $scope.setShowCardDeck = function() {
-        //     $scope.showCardDeck = true;
-        //     if ($scope.game.estimate && $scope.game.estimate.results) {
-        //         angular.forEach($scope.game.estimate.results, function(result) {
-        //             if (
-        //                 result &&
-        //                 result.user &&
-        //                 result.user.id &&
-        //                 $scope.fp.user &&
-        //                 result.user.id === $scope.fp.user.id
-        //             ) {
-        //                 $scope.showCardDeck = false;
-        //             }
-        //         });
-        //     }
-        // };
-
-        // // Set estimation form visibility
-        // $scope.setShowSelectEstimate = function() {
-        //     $scope.showSelectEstimate = false;
-        //     if (
-        //         $scope.game.estimate &&
-        //         $scope.game.owner &&
-        //         $scope.fp.user &&
-        //         (
-        //             $scope.game.owner.id === $scope.fp.user.id
-        //         )
-        //     ) {
-        //         $scope.showSelectEstimate = true;
-        //     }
-        // };
-
-        // // Set new estimate average points
-        // $scope.setNewEstimate = function() {
-        //     $scope.newEstimate = { points: $scope.getResultsAverage() };
-        // };
-
-        // // Disable play again and reveal buttons if results are empty
-        // $scope.setDisablePlayAgainAndRevealButtons = function() {
-        //     if (!$scope.game.estimate) {
-        //         return;
-        //     }
-
-        //     if (!$scope.game.estimate.results || $scope.game.estimate.results.length === 0) {
-        //         $scope.disablePlayAgainAndRevealButtons = true;
-        //     } else {
-        //         $scope.disablePlayAgainAndRevealButtons = false;
-        //     }
-        // };
-
-        // // Show cards?
-        // $scope.setShowCards = function() {
-        //     $scope.showCards = false;
-        //     if ($scope.game.estimate.status === 'reveal') {
-        //         $scope.showCards = true;
-        //     } else if (
-        //         $scope.game.estimate &&
-        //         $scope.game.estimate.results &&
-        //         $scope.game.estimate.results.length &&
-        //         $scope.game.estimate.results.length >= $scope.totalOfOnlineParticipants() &&
-        //         $scope.allVotersVoted()
-        //     ) {
-        //         $scope.showCards = true;
-        //     }
-        // };
+        // Logout
+        $scope.logout = function() {
+            $cookieStore.remove('fp');
+            $location.path('/');
+            $location.replace();
+        };
 
         // seek non-voted voters
         $scope.allVotersVoted = function() {
@@ -353,22 +283,6 @@ angular.module('firePokerApp')
             $scope.game.estimate.results.push({ points: points, user: $scope.fp.user, when: new Date().getTime() });
         };
 
-        // // Show checkmarks when participant has voted
-        // $scope.setShowCheckmarks = function() {
-        //     if ($scope.game.estimate && $scope.game.estimate.results) {
-        //         angular.forEach($scope.game.estimate.results, function(result) {
-        //             if (
-        //                 result &&
-        //                 result.user &&
-        //                 result.user.id &&
-        //                 result.user.id === $scope.fp.user.id
-        //             ) {
-        //                 $scope.game.participants[result.user.id].hasVoted = true;
-        //             }
-        //         });
-        //     }
-        // };
-
         // Get estimate results average
         $scope.getResultsAverage = function() {
             if (!$scope || !$scope.game || !$scope.game.deck) {
@@ -384,35 +298,29 @@ angular.module('firePokerApp')
             return res;
         };
 
-        // // Accept
-        // $scope.acceptRound = function() {
-        //     $scope.game.estimate.points = $scope.newEstimate.points;
-        //     $scope.game.estimate.endedAt = new Date().getTime();
-        //     $scope.game.estimate.status = 'closed';
-        //     $scope.game.stories[$scope.game.estimate.id] = angular.copy($scope.game.estimate);
-        //     $scope.game.estimate = false;
-        //     angular.forEach($scope.game.participants, function(participant) {
-        //         participant.hasVoted = false;
-        //     });
-        // };
+        // Accept
+        $scope.acceptRound = function() {
+            $scope.game.estimate.points = $scope.newEstimate.points;
+            $scope.game.estimate.endedAt = new Date().getTime();
+            $scope.game.estimate.status = 'closed';
+            $scope.game.stories[$scope.game.estimate.id] = angular.copy($scope.game.estimate);
+            $scope.game.estimate = false;
+            angular.forEach($scope.game.participants, function(participant) {
+                participant.hasVoted = false;
+            });
+        };
 
-        // // Play again
-        // $scope.playAgain = function() {
-        //     $scope.game.estimate.results = [];
-        //     $scope.game.estimate.status = 'active';
-        //     angular.forEach($scope.game.participants, function(participant) {
-        //         participant.hasVoted = false;
-        //     });
-        // };
+        // Play again
+        $scope.playAgain = function() {
+            $scope.game.estimate.results = [];
+            $scope.game.estimate.status = 'active';
+            angular.forEach($scope.game.participants, function(participant) {
+                participant.hasVoted = false;
+            });
+        };
 
-        // // Reveal cards
-        // $scope.revealCards = function() {
-        //     $scope.game.estimate.status = 'reveal';
-        // };
-
-        // // Redirect to game if fullname already set
-        // $scope.redirectToGameIfFullnameAlreadySet();
-
-        // // Load game and register presence
-        // $scope.registerPresence();        
+        // Reveal cards
+        $scope.revealCards = function() {
+            $scope.game.estimate.status = 'reveal';
+        };
     });

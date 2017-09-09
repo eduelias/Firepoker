@@ -7,6 +7,22 @@
  * @author Eduardo Elias Saleh <du7@msn.com>
  */
 angular.module('firePokerApp')
+    .filter('filterObjectBy', function() {
+        return function(input, property, value) {
+            if (!input) return input;
+            if (!property) return input;
+            if (!value) return input;
+            var expected = ('' + value).toLowerCase();
+            var result = {};
+            angular.forEach(input, function(value, key) {
+                var actual = value[property].toString().toLowerCase();
+                if (actual.indexOf(expected) !== -1) {
+                    result[key] = value;
+                }
+            });
+            return result;
+        }
+    })
     .factory('utils', ['$firebaseArray', '$firebaseObject', '$cookies', '$routeParams', '$location',
         function($firebaseArray, $firebaseObject, $cookies, $routeParams, $location) {
             return {
