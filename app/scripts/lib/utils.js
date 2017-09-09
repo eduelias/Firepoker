@@ -15,9 +15,11 @@ angular.module('firePokerApp')
             var expected = ('' + value).toLowerCase();
             var result = {};
             angular.forEach(input, function(value, key) {
-                var actual = value[property].toString().toLowerCase();
-                if (actual.indexOf(expected) !== -1) {
-                    result[key] = value;
+                if (typeof(value[property]) != 'undefined') {
+                    var actual = value[property].toString().toLowerCase();
+                    if (actual.indexOf(expected) !== -1) {
+                        result[key] = value;
+                    }
                 }
             });
             return result;
@@ -134,6 +136,10 @@ angular.module('firePokerApp')
                         var gid = this.guid();
                         $scope.fp.gid = gid;
                         $cookies.putObject('fp', $scope.fp);
+                    }
+
+                    if ($scope.game && $scope.fp.user.fullname !== $scope.game.participants[$scope.fp.user.id].fullname) {
+                        $scope.game.participants[$scope.fp.user.id] = $scope.fp.user;
                     }
                 },
                 dealsWithRouting: function($scope) {
